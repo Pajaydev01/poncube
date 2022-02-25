@@ -1,0 +1,29 @@
+<ion-header class="header ion-no-border">
+  <ion-toolbar >
+      <div (click)="dismiss()"><ion-icon name="arrow-back-outline"></ion-icon></div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<div class="">
+  <div *ngIf="pays">
+<ion-item>
+  <ion-input type="number" [(ngModel)]="amnt" placeholder="Enter amount"></ion-input>
+  </ion-item>
+    <ion-button color="success" (click)="pay()" expand="full">Proceed</ion-button>
+    </div>
+    <div>
+  <div class="cent" *ngIf="payss">
+    <button class="buttons"
+       angular4-paystack
+       [paystackOptions]="options"
+       (paymentInit)="paymentInit()"
+       (onClose)="paymentCancel()"
+       (callback)="paymentDone($event)"
+     >
+       Pay with Paystack
+     </button>
+  </div>
+  </div>
+</div>
+</ion-content>

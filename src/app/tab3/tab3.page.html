@@ -1,0 +1,301 @@
+<ion-app>
+<!-- categories menu -->
+  <ion-menu side="start" menuId="category" contentId="mainer">
+    <ion-header>
+    <ion-toolbar color="success">
+      <ion-title>CATEGORIES</ion-title>
+    </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list *ngFor="let items of categories">
+        <ion-item (click)="sub(items.category_id, $event,items.category)" class="hover">{{items.category}}</ion-item>
+        </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="mainer" ></ion-router-outlet>
+
+
+<!-- profile menu -->
+<!-- side menu here -->
+<ion-menu side="start" menuId="profileMenu" contentId="mains">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Profile Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item>
+        <h3>Account Balance: {{balance*rate_value | currency:currency:'symbol-narrow'}}</h3>
+</ion-item>
+<ion-item>
+        <ion-button color="light" (click)="edit_profile()"><ion-icon name="pencil-outline"></ion-icon> Edit profile</ion-button>
+      </ion-item>
+<ion-item>
+        <ion-button color="light" (click)="load_pay()"><ion-icon name="wallet-outline"></ion-icon>Recharge wallet</ion-button>
+      </ion-item>
+      <ion-item>
+              <ion-button color="light" (click)="transfer()"><ion-icon name="paper-plane-outline"></ion-icon> Send funds</ion-button>
+            </ion-item>
+            <ion-item>
+                    <ion-button color="dark" (click)="change_token()"><ion-icon name="document-lock-outline"></ion-icon> Change token</ion-button>
+                  </ion-item>
+    </ion-list>
+  </ion-content>
+  <ion-footer>
+    <ion-toolbar>
+        <div class="pad">  Wallet id: {{wallet_id}}</div>
+      <ion-button color="dark" (click)="history()">
+        Transaction history
+        </ion-button>
+
+      </ion-toolbar>
+    </ion-footer>
+</ion-menu>
+<ion-router-outlet id="mains" ></ion-router-outlet>
+
+
+<ion-header [translucent]="true">
+  <ion-toolbar>
+
+  <div class="browser">
+    <div class="p-t">
+              <div class="logger">
+                <ion-select placeholder="Change currency" [(ngModel)]="currency" (ionChange)="change_rate()">
+                  <ion-select-option value="NGN">NGN</ion-select-option>
+                    <ion-select-option value="USD">USD</ion-select-option>
+                      <ion-select-option value="GBP">GBP</ion-select-option>
+                        <ion-select-option value="EUR">EUR</ion-select-option>
+                  </ion-select>
+                  <ion-button (click)="logout()"><span></span>LOG OUT</ion-button>
+
+                  <ion-button  (click)="load_cart()" data-hover="My Carts" class="cart">  <ion-icon name="cart"></ion-icon> <span class="counter" color="light">{{counts}}</span></ion-button>
+
+                  <ion-button color="dark" (click)="confirm()" *ngIf="nonseller">Become a poncube seller</ion-button>
+                  <ion-button color="dark" (click)="route('tabs/tab2')" *ngIf="seller">My Shop</ion-button>
+                  <ion-button color="dark" disabled="true" *ngIf="pending">In progress</ion-button>
+                </div>
+
+        <div class="center">
+        <div class="logo" (click)="route('tabs/tab1')">
+<img src="assets/images/logo.png">
+        </div>
+          </div>
+
+          <!-- search for browser -->
+          <!-- <div class="">
+      <div class="browser">
+        <ion-searchbar showCancelButton="focus" placeholder="Search poncube" class="align-center" [(ngModel)]="search" (ionChange)="searchs()" debounce="0" class="searchbar" (click)="scroll()"></ion-searchbar>
+        </div>
+
+          </div> -->
+</div>
+</div>
+
+
+<!-- mobile -->
+<div class="mobile">
+  <div>
+      <div class="flex">
+        <ion-select placeholder="Change currency" [(ngModel)]="currency" (ionChange)="change_rate()">
+          <ion-select-option value="NGN">NGN</ion-select-option>
+            <ion-select-option value="USD">USD</ion-select-option>
+              <ion-select-option value="GBP">GBP</ion-select-option>
+                <ion-select-option value="EUR">EUR</ion-select-option>
+          </ion-select>
+          <ion-button (click)="logout()"><span></span>LOG OUT</ion-button>
+          <ion-button  (click)="load_cart()">  <ion-icon name="cart"></ion-icon> <span class="counter" color="light">{{counts}}</span></ion-button>
+        </div>
+
+        <div class="center">
+
+          <div class="logo" (click)="route('tabs/tab1')">
+      <img src="assets/images/logo.png">
+          </div>
+    </div>
+          </div>
+</div>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-grid>
+    <ion-row class="mobile">
+      <ion-col class="flex-right">
+    <div (click)="openFirst('category')">
+      <ion-icon name="menu"  (click)="openFirst('category')"></ion-icon>
+    </div>
+
+    </ion-col>
+</ion-row>
+<ion-row class="browser">
+    <ion-col class="flex-right">
+  <div (click)="openFirst('profileMenu')">
+    <ion-icon name="menu"  (click)="openFirst('profileMenu')"></ion-icon>
+  </div>
+
+  </ion-col>
+      </ion-row>
+<ion-row>
+
+  <ion-col class="browser">
+         <!-- <h2 class="align-center pb-1">Categories</h2>
+           <ion-slides pager="false" [options]="slideOptsBrowser">
+                  <ion-slide *ngFor="let items of categories">
+                    <div (click)="category(items)">
+                    <ion-icon class="icons" name="bag-handle-outline"></ion-icon>
+                    <p class="align-center">{{items.category}}</p>
+                    </div>
+                  </ion-slide>
+                </ion-slides> -->
+                <div class="center">
+                  <div *ngFor="let items of categories">
+                  <ion-button size="small" (click)="sub(items.category_id, $event,items.category)" >  {{items.category}}</ion-button>
+                  </div>
+                </div>
+    </ion-col>
+
+
+
+
+  </ion-row>
+
+    <ion-row color="">
+      <ion-col class="center">
+        <ion-card class="p_card browser">
+<p class="align-center">Click the image to change your DP</p>
+           <div class="center">
+             <div class="upload-btn-wrapper img-crv">
+             <ion-img [src]="userImage" alt="{{userImage}}"></ion-img>
+             <input type="file" accept="image/*" id="upload" (change)="add_image($event)"/>
+             </div>
+           </div>
+
+           <ion-card-header class="align-center">
+             <ion-card-title>{{firstname}} {{lastname}}</ion-card-title>
+                <ion-card-subtitle>{{email}} | {{phone}}</ion-card-subtitle>
+           </ion-card-header>
+         </ion-card>
+
+         <ion-card class="mobile">
+           <p class="align-center">Click the image to change your DP</p>
+           <div class="center">
+             <div class="upload-btn-wrapper img-crv">
+             <ion-img [src]="userImage" alt="{{userImage}}"></ion-img>
+             <input type="file" accept="image/*" id="upload" (change)="add_image($event)"/>
+             </div>
+           </div>
+            <ion-card-header class="align-center">
+              <ion-card-title>{{firstname}} {{lastname}}</ion-card-title>
+                 <ion-card-subtitle>{{email}} | {{phone}}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+<ion-button (click)="openFirst('profileMenu')" color="dark">
+  PROFILE MENU
+  </ion-button>
+  <ion-button color="dark" (click)="confirm()" *ngIf="nonseller">Become a poncube seller</ion-button>
+  <ion-button color="dark" (click)="route('tabs/tab2')" *ngIf="seller">My Shop</ion-button>
+  <ion-button color="dark" disabled="true" *ngIf="pending">In progress</ion-button>
+              </ion-card-content>
+          </ion-card>
+        </ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col class="">
+          <ion-card color="success" (click)="load_cart()">
+
+             <ion-card-header class="align-center">
+
+               <ion-card-title >
+                  <div><h1>{{counts}}</h1></div></ion-card-title>
+                  <ion-card-subtitle class="grid"> <div>
+                         <ion-icon class="icons" name="bag-handle-outline"></ion-icon>
+                     </div>
+                     <div>My Shopping List</div></ion-card-subtitle>
+             </ion-card-header>
+           </ion-card>
+          </ion-col>
+
+          <ion-col class="">
+            <ion-card color="success" (click)="get_orders()">
+
+               <ion-card-header class="align-center">
+
+                 <ion-card-title >
+                    <div><h1>{{count}}</h1></div></ion-card-title>
+                    <ion-card-subtitle class="grid"> <div>
+                           <ion-icon class="icons" name="bag-handle-outline"></ion-icon>
+                       </div>
+                       <div>My Paid Orders</div></ion-card-subtitle>
+               </ion-card-header>
+             </ion-card>
+            </ion-col>
+  </ion-row>
+
+<ion-row>
+  <ion-col class="align-center browser">
+    <strong>Your favorites</strong>
+    <div class="back" (click)="prev()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </div>
+    <div class="forward" (click)="next()">
+      <ion-icon name="arrow-forward"></ion-icon>
+    </div>
+  <ion-slides pager="false" [options]="slideOptsBrowser" #slides>
+         <ion-slide *ngFor="let items of datas">
+           <ion-card class="store_card" (click)="product(items.item_id,items.shop_id,items.item_type)">
+             <div>
+             <div class="center">
+               <ion-img class="image" src="{{items.product_image}}">
+                 </ion-img>
+             </div>
+             <ion-card-header>
+              <ion-card-title class="align-center">{{items.item_name}}
+             </ion-card-title>
+
+             <ion-card-subtitle>
+               {{items.price*rate_value | currency:currency}}
+               </ion-card-subtitle>
+             </ion-card-header>
+             </div>
+             </ion-card>
+         </ion-slide>
+       </ion-slides>
+       </ion-col>
+
+       <ion-col class="align-center mobile">
+         <strong>Your favorites</strong>
+         <div class="back" (click)="prev()">
+           <ion-icon name="arrow-back"></ion-icon>
+         </div>
+         <div class="forward" (click)="next()">
+           <ion-icon name="arrow-forward"></ion-icon>
+         </div>
+       <ion-slides pager="false" [options]="slideOptsMobile" #slider>
+              <ion-slide *ngFor="let items of datas">
+                <ion-card class="store_card" (click)="product(items.item_id,items.shop_id,items.item_type)">
+                  <div>
+                  <div class="center">
+                    <ion-img class="image" src="{{items.product_image}}">
+                      </ion-img>
+                  </div>
+                  <ion-card-header>
+                   <ion-card-title class="align-center t-small">{{items.item_name}}
+                  </ion-card-title>
+
+                  <ion-card-subtitle>
+                    {{items.price*rate_value | currency:currency}}
+                    </ion-card-subtitle>
+                  </ion-card-header>
+                  </div>
+                  </ion-card>
+              </ion-slide>
+            </ion-slides>
+            </ion-col>
+  </ion-row>
+  <app-footpage></app-footpage>
+      </ion-grid>
+</ion-content>
+</ion-app>

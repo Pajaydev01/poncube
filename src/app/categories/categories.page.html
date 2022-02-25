@@ -1,0 +1,535 @@
+<ion-app  class="white">
+  <ion-menu side="start" menuId="cates" contentId="main">
+    <ion-header>
+    <ion-toolbar color="success">
+      <ion-title>CATEGORIES</ion-title>
+    </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list *ngFor="let items of categories">
+        <ion-item (click)="sub(items.category_id, $event,items.category)" class="hover">{{items.category}}</ion-item>
+        </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="main" ></ion-router-outlet>
+
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <div class="browser">
+      <div class="p-t">
+        <div *ngIf="scrolled">
+          <div class="space">
+<div class="">
+   <ion-button (click)="route('tabs/tab1')"> <ion-icon name="arrow-back-outline"></ion-icon> <span class="counter" color="light"> {{name}}</span></ion-button>
+</div>
+<div>
+        <div *ngIf="logged" class="flex">
+          <ion-select placeholder="Change currency" [(ngModel)]="currency" (ionChange)="change_rate()">
+            <ion-select-option value="NGN">NGN</ion-select-option>
+              <ion-select-option value="USD">USD</ion-select-option>
+                <ion-select-option value="GBP">GBP</ion-select-option>
+                  <ion-select-option value="EUR">EUR</ion-select-option>
+            </ion-select>
+                  <ion-button (click)="reg('login')" class="">Sign in</ion-button>
+             <ion-button  (click)="load_cart()" class="cart" data-hover="My Carts">  <ion-icon name="cart"></ion-icon> <span class="counter" color="light">{{counts}}</span></ion-button>
+                </div>
+                <div class="flex" *ngIf="!logged">
+                  <ion-select placeholder="Change currency" [(ngModel)]="currency" (ionChange)="change_rate()">
+                    <ion-select-option value="NGN">NGN</ion-select-option>
+                      <ion-select-option value="USD">USD</ion-select-option>
+                        <ion-select-option value="GBP">GBP</ion-select-option>
+                          <ion-select-option value="EUR">EUR</ion-select-option>
+                    </ion-select>
+                  <ion-button (click)="meni('menu',$event,dp,fullname)"><img src="{{(dp=='' || dp==undefined)?'assets/images/user.png':dp}}" class="dp">
+                  </ion-button>
+                    <ion-button  (click)="load_cart()" data-hover="My Carts" class="cart">  <ion-icon name="cart"></ion-icon> <span class="counter" color="light">{{counts}}</span></ion-button>
+                  </div>
+                  </div>
+                  </div>
+</div>
+          <div class="center" *ngIf="scrolled">
+          <div class="logo">
+<img src="assets/images/logo.png">
+          </div>
+            </div>
+
+            <!-- search for browser -->
+            <div class="">
+        <div class="browser">
+          <ion-searchbar showCancelButton="focus" placeholder="Search {{name}}" class="align-center" [(ngModel)]="search" (ionChange)="searchs()" debounce="0" class="searchbar" (click)="scroll($event)"></ion-searchbar>
+          </div>
+
+            </div>
+</div>
+</div>
+
+<div class="mobile">
+  <div>
+    <div *ngIf="scrolled" class="space">
+      <div class="">
+
+         <ion-button (click)="route('tabs/tab1')"> <ion-icon name="arrow-back-outline"></ion-icon> <span class="counter" color="light"> {{name}}</span></ion-button>
+      </div>
+
+    <div class="" *ngIf="logged">
+      <div class="flex">
+        <ion-select placeholder="Change currency" [(ngModel)]="currency" (ionChange)="change_rate()">
+          <ion-select-option value="NGN">NGN</ion-select-option>
+            <ion-select-option value="USD">USD</ion-select-option>
+              <ion-select-option value="GBP">GBP</ion-select-option>
+                <ion-select-option value="EUR">EUR</ion-select-option>
+          </ion-select>
+        <ion-button (click)="reg('login')" class="">Sign in</ion-button>
+  <ion-button  (click)="load_cart()">  <ion-icon name="cart"></ion-icon> <span class="counter" color="light">{{counts}}</span></ion-button>
+  </div>
+      </div>
+      <div class="" *ngIf="!logged">
+        <ion-button (click)="meni('menu',$event,dp,fullname)"><img src={{dp}} class="dp">
+        </ion-button>
+          <ion-button  (click)="load_cart()">  <ion-icon name="cart"></ion-icon> <span class="counter" color="light">{{counts}}</span></ion-button>
+        </div>
+        </div>
+
+        <div class="center" *ngIf="scrolled">
+          <div class="logo">
+      <img src="assets/images/logo.png">
+          </div>
+    </div>
+          </div>
+</div>
+
+
+
+        <ion-grid>
+      <ion-row class="center">
+
+        <ion-col class="mobile">
+          <div class="center"><div><ion-icon name="menu" class="icon" (click)="openFirst()"></ion-icon></div><ion-searchbar showCancelButton="focus" placeholder="Search {{name}}" class="search" [(ngModel)]="search" (ionChange)="searchs()" debounce="0" (click)="scroll($event)"></ion-searchbar></div>
+          </ion-col>
+      </ion-row>
+      </ion-grid>
+
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" #content *ngIf="data" [scrollEvents]="true" (ionScroll)="onScroll($event)">
+  <!-- side menu here -->
+
+
+
+
+
+<ion-grid>
+  <ion-row color="">
+    <ion-col class="browser">
+           <!-- <h2 class="align-center pb-1">Categories</h2>
+             <ion-slides pager="false" [options]="slideOptsBrowser">
+                    <ion-slide *ngFor="let items of categories">
+                      <div (click)="category(items)">
+                      <ion-icon class="icons" name="bag-handle-outline"></ion-icon>
+                      <p class="align-center">{{items.category}}</p>
+                      </div>
+                    </ion-slide>
+                  </ion-slides> -->
+                  <div class="center">
+                    <div *ngFor="let items of categories">
+                    <ion-button size="small" (click)="sub(items.category_id, $event,items.category)" >  {{items.category}}</ion-button>
+                    </div>
+                  </div>
+      </ion-col>
+</ion-row>
+<ion-row>
+
+   <ion-col class="browser green">
+           <p class="align-center pb-1">SHOPS YOU MIGHT LIKE</p>
+           <div class="back" (click)="prev()">
+             <ion-icon name="arrow-back"></ion-icon>
+           </div>
+           <div class="forward" (click)="next()">
+             <ion-icon name="arrow-forward"></ion-icon>
+           </div>
+
+             <ion-slides pager="false" [options]="slideOptsBrowser" #slides>
+                    <ion-slide *ngFor="let items of store">
+                      <ion-card class="store_card">
+                        <ion-card-header class="grid">
+                          <div class="flexer">
+                      <div (click)="check_store(items.store_id)" [ngStyle]="{'background-image':'url('+items.dp.replace(' ','%20')+')','width':'150px', 'height':'150px','background-position':'center','background-size':'cover','background-repeat':'no-repeat','border-radius':'50px'}">
+                        </div>
+                        </div>
+                        <ion-card-subtitle>{{items.name}}</ion-card-subtitle>
+                      <ion-card-subtitle>  <i>{{items.caption}}</i></ion-card-subtitle>
+                        </ion-card-header>
+                        </ion-card>
+                    </ion-slide>
+                  </ion-slides>
+
+      </ion-col>
+
+      <ion-col class="mobile green">
+              <p class="align-center pb-1">SHOPS YOU MIGHT LIKE</p>
+              <div class="back" (click)="prev()">
+                <ion-icon name="arrow-back" class="c-green"></ion-icon>
+              </div>
+              <div class="forward" (click)="next()">
+                <ion-icon name="arrow-forward" class="c-green"></ion-icon>
+              </div>
+                <ion-slides pager="false" [options]="slideOptsMobile" #slider>
+                       <ion-slide *ngFor="let items of store">
+                         <ion-card class="store_card">
+                           <ion-card-header class="grid">
+                                <div class="center">
+                         <div (click)="check_store(items.store_id)" [ngStyle]="{'background-image':'url('+items.dp.replace(' ','%20')+')','width':'110px', 'height':'110px','background-position':'center','background-size':'cover','background-repeat':'no-repeat','border-radius':'70px'}">
+                              </div>
+                           </div>
+                           <ion-card-subtitle>{{items.name}}</ion-card-subtitle>
+                         <ion-card-subtitle class="m-s">  <i>{{items.caption}}</i></ion-card-subtitle>
+                           </ion-card-header>
+                           </ion-card>
+                       </ion-slide>
+                     </ion-slides>
+
+         </ion-col>
+    </ion-row>
+
+<div *ngIf="products!==undefined">
+     <ion-card-title class="align-center t-small">Explore {{name}}
+</ion-card-title>
+
+    <ion-row class="center p_t">
+      <ion-col  *ngFor="let result of products" size="6" class="mobile">
+        <div *ngIf="result.amount>0 || result.amount==''">
+        <div (click)="product(result.item_id, result.shop_id,result.item_type)" class="box" *ngIf="products.length!==0">
+               <div class="center"><div class="" [ngStyle]="{'background-image':'url('+result.image.replace(' ','%20')+')','width':'110px', 'height':'110px','background-position':'center','background-size':'cover','background-repeat':'no-repeat','border-radius':'70px'}">
+
+               </div></div>
+          <div>
+           <ion-card-title class="align-center t-small"><strong>
+  {{ (result.name.length>6)? (result.name | slice:0:15)+'..':(result.name) }}</strong></ion-card-title>
+           <ion-card-content>
+             <div class="align-center">
+               <!-- separate discountd offers -->
+               <p *ngIf="result.promo!=='1'"><strong>{{(result.price*rate_value) | currency:currency}}</strong></p>
+               <p *ngIf="result.promo==='1'"><del><strong>{{(result.price*rate_value) | currency:currency}}</strong></del></p>
+               <p *ngIf="result.promo==='1'" class="gr"><strong>{{(result.promo_price*rate_value) | currency:currency}}</strong></p>
+               <p *ngIf="result.promo==='1'" class="gr">{{result.promo_name}}</p>
+
+              <!-- <p class="m-s"><strong>{{result.price | currency:"NGN"}}</strong></p> -->
+               <p class="t-small"><strong>{{(result.item_type!=="service")?(result.amount)+'available':"Click to view service details"}}</strong></p>
+             </div>
+          </ion-card-content>
+         </div>
+         </div>
+          </div>
+        </ion-col>
+
+        <ion-col  *ngFor="let result of products" size="2" class="ion-align-self-center browser" #contents>
+          <div *ngIf="result.amount>0 || result.amount==''">
+          <ion-card (click)="product(result.item_id, result.shop_id,result.item_type)" button="true">
+
+  <div class="center"><ion-img [src]="result.image"></ion-img></div>
+
+            <ion-card-header>
+             <ion-card-title class="align-center"><strong> {{ (result.name.length>6)? (result.name | slice:0:15)+'..':(result.name) }}</strong></ion-card-title>
+             <ion-card-content>
+               <div class="align-center">
+  <!-- separate discountd offers -->
+  <h3 *ngIf="result.promo!=='1'"><strong>{{(result.price*rate_value) | currency:currency}}</strong></h3>
+  <h3 *ngIf="result.promo==='1'"><del><strong>{{(result.price*rate_value) | currency:currency}}</strong></del></h3>
+  <h3 *ngIf="result.promo==='1'" class="gr"><strong>{{(result.promo_price*rate_value) | currency:currency}}</strong></h3>
+  <h3 *ngIf="result.promo==='1'" class="gr">{{result.promo_name}}</h3>
+
+
+
+                 <h3><strong>{{(result.item_type!=="service")?(result.amount)+' Available':"Click to view service details"}}</strong></h3></div>
+            </ion-card-content>
+           </ion-card-header>
+            </ion-card>
+            </div>
+          </ion-col>
+
+      </ion-row>
+    </div>
+    <div class="" *ngIf="products===undefined">
+
+                <ion-card>
+                  <ion-card-subtitle class="aling-center">Sorry no products available for now, please check back</ion-card-subtitle>
+                  </ion-card>
+    </div>
+<div class="p-g browser green">
+  <ion-row>
+    <ion-col>
+<div class="align-center">
+<h1 class="c-green title">WHAT IS PONCUBE?</h1>
+<p>Read all about the products of Nigeria cube</p>
+</div>
+    </ion-col>
+</ion-row>
+  <ion-row class="">
+    <ion-col class="align-center">
+      <ion-card>
+        <ion-card-header>
+<div class="">
+  <h1 class="c-green">Our Vision</h1>
+</div>
+</ion-card-header>
+<ion-card-content>
+<div>
+<p>To offer every crafts person a chance to reach customers within and beyond Nigeria.</p>
+
+<p>We want to help small businesses, exporters and manufacturers in Nigeria sell their products around the globe and contribute towards the country’s economy. At Poncube, we reinvent the way people are used to selling their products. We rethink the selling process and spend hours giving the right platform to sellers and buyers to interact.</p>
+</div>
+</ion-card-content>
+</ion-card>
+      </ion-col>
+      <ion-col class="align-center">
+        <ion-card>
+          <ion-card-header>
+        <div class="">
+          <h1 class="c-green">Our Philosophy</h1>
+        </div>
+        </ion-card-header>
+        <ion-card-content>
+        <p>We are constantly asking ourselves, “How can we help improve the country’s economy? How can we promote local artists?” We connect millions of buyers around the globe with Nigerian sellers, thus empowering them and creating great opportunities. In the coming few years, we want to become one of the best destination for discovering great economic opportunities.</p>
+        </ion-card-content>
+        </ion-card>
+        </ion-col>
+<ion-col class="align-center">
+  <ion-card>
+    <ion-card-header>
+  <div class="">
+    <h1 class="c-green">Join the community</h1>
+  </div>
+  </ion-card-header>
+  <ion-card-content>
+<p>Connect with sellers from Nigeria or join us to team up with like-minded people. We help makers, crafters, and artists to sell their products and contribute to the country’s economy.
+So if you are ready to sell, we are here to get your online shop up and working in the shortest time possible.</p>
+</ion-card-content>
+</ion-card>
+  </ion-col>
+
+    </ion-row>
+    </div>
+
+
+    <div class="mobile c-green">
+      <ion-row>
+        <div class="align-center">
+        <h1 class="c-green title">WHAT IS PONCUBE?</h1>
+        <p>Read all about the products of Nigeria cube</p>
+        </div>
+        </ion-row>
+        <ion-row>
+          <ion-col class="align-center">
+            <ion-card class="green_w">
+              <ion-card-header>
+      <div class="">
+        <h1 class="c-green">Our Vision</h1>
+      </div>
+      </ion-card-header>
+      <ion-card-content>
+      <div>
+      <p>To offer every crafts person a chance to reach customers within and beyond Nigeria.</p>
+
+      <p>We want to help small businesses, exporters and manufacturers in Nigeria sell their products around the globe and contribute towards the country’s economy. At Poncube, we reinvent the way people are used to selling their products. We rethink the selling process and spend hours giving the right platform to sellers and buyers to interact.</p>
+      </div>
+      </ion-card-content>
+      </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="align-center">
+              <ion-card class="green_w">
+                <ion-card-header>
+              <div class="">
+                <h1 class="c-green">Our Philosophy</h1>
+              </div>
+              </ion-card-header>
+              <ion-card-content>
+              <p>We are constantly asking ourselves, “How can we help improve the country’s economy? How can we promote local artists?” We connect millions of buyers around the globe with Nigerian sellers, thus empowering them and creating great opportunities. In the coming few years, we want to become one of the best destination for discovering great economic opportunities.</p>
+              </ion-card-content>
+              </ion-card>
+              </ion-col>
+            </ion-row>
+<ion-row>
+  <ion-col class="align-center">
+    <ion-card class="green_w">
+      <ion-card-header>
+    <div class="">
+      <h1 class="c-green">Join the community</h1>
+    </div>
+    </ion-card-header>
+    <ion-card-content>
+  <p>Connect with sellers from Nigeria or join us to team up with like-minded people. We help makers, crafters, and artists to sell their products and contribute to the country’s economy.
+  So if you are ready to sell, we are here to get your online shop up and working in the shortest time possible.</p>
+  </ion-card-content>
+  </ion-card>
+    </ion-col>
+  </ion-row>
+
+    </div>
+
+    <!-- footer here -->
+    <div class="browser">
+<ion-row>
+  <ion-col>
+    <p class="c-green">INFORMATION</p>
+    <ion-list>
+    <ion-item>
+    About Us
+      </ion-item>
+      <ion-item>
+        Delivery information
+        </ion-item>
+        <ion-item>
+          Privacy policy
+          </ion-item>
+          <ion-item>
+            Terms and Condition
+            </ion-item>
+            <ion-item>
+            FAQ
+              </ion-item>
+              </ion-list>
+    </ion-col>
+    <ion-col>
+      <p class="c-green">CUSTOMER SERVICE</p>
+      <ion-list>
+      <ion-item>
+      Contact Us
+        </ion-item>
+        <ion-item>
+          Returns
+          </ion-item>
+          <ion-item>
+          Site map
+            </ion-item>
+            </ion-list>
+      </ion-col>
+      <ion-col>
+        <p class="c-green">EXTRAS</p>
+        <ion-list>
+        <ion-item>
+        Gifts Certificates
+          </ion-item>
+          <ion-item>
+            Affiliates
+            </ion-item>
+            <ion-item>
+            Specials
+              </ion-item>
+              </ion-list>
+        </ion-col>
+
+        <ion-col>
+          <p class="c-green">FOLLOW US</p>
+          <ion-list>
+          <ion-item>
+          Contact Us
+            </ion-item>
+            <ion-item>
+              Returns
+              </ion-item>
+              <ion-item>
+              Site map
+                </ion-item>
+                </ion-list>
+          </ion-col>
+
+  </ion-row>
+      </div>
+
+      <div class="mobile">
+        <ion-list>
+          <ion-item class="c-green point" (click)="footie('information',$event)">
+INFORMATION
+            </ion-item>
+            <ion-item class="c-green point" (click)="footie('c_service',$event)">
+                CUSTOMER SERVICE
+              </ion-item>
+              <ion-item class="c-green point" (click)="footie('extra',$event)">
+                  EXTRAS
+                </ion-item>
+                <ion-item class="c-green">
+              FOLLOW US
+                  </ion-item>
+                </ion-list>
+      </div>
+</ion-grid>
+
+<ion-fab slot="fixed" vertical="bottom" horizontal="end">
+
+  <ion-fab-button color="success" (click)="load_cart()"><ion-icon name="chatbox"></ion-icon>
+    <!-- <sub class="counter" color="light">{{counts}}</sub> -->
+  </ion-fab-button>
+</ion-fab>
+
+</ion-content>
+
+</ion-app>
+
+<!-- Skeleton screen -->
+<div *ngIf="!data">
+  <div class="ion-padding custom-skeleton">
+    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+    <ion-skeleton-text animated></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+  </div>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>
+        <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
+      </ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-avatar slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-avatar>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-thumbnail slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-thumbnail>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-skeleton-text animated style="width: 27px; height: 27px" slot="start"></ion-skeleton-text>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</div>

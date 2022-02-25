@@ -1,0 +1,38 @@
+<ion-app>
+  <ion-header class="header ion-no-border">
+    <ion-toolbar>
+      <ion-title ><ion-icon name="arrow-back-outline" (click)="dismiss()"></ion-icon></ion-title>
+    </ion-toolbar>
+  </ion-header>
+<ion-content>
+  <div *ngIf="carts">
+  <ion-card *ngFor="let items of cart_lists">
+    <ion-card-header>
+  <div class="cent">
+  <ion-img [src]="items.image[0]"></ion-img>
+  </div>
+      <ion-card-subtitle>{{items.price*rate_value | currency:currency}} |  {{(count=="" || count==null)?0:count}} Sold</ion-card-subtitle>
+      <ion-card-title>{{items.name}}</ion-card-title>
+      <div class="">
+        <i>Selected Options</i>
+        <div  *ngFor="let item of items.options">
+        <div class="">
+         Preferred Option: {{item.option}} | Choice: {{item.choice}}
+        </div>
+         </div>
+      </div>
+    </ion-card-header>
+    <ion-card-content>
+  <div class="cent">
+<p>Total Item(s): {{items.unit}} plus {{items.delivery.name}} fee of {{items.delivery.price*rate_value}}</p>
+<p>Total Price: {{(items.unit*items.price)*rate_value | currency:currency}}
+  </div>
+  <div class="flex-fl">
+    <ion-button color="danger" (click)="delist(items.u_id)">Delist</ion-button>
+    <ion-button color="success" (click)="checkout(items.id, items.name, items.price, items.count, items.image, items.description, items.unit, items.options,items.delivery.name,items.delivery.price, items.u_id,items.seller_id,items.item_type, items.attachment)">Check out</ion-button>
+  </div>
+      </ion-card-content>
+    </ion-card>
+</div>
+</ion-content>
+</ion-app>

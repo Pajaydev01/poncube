@@ -1,0 +1,705 @@
+<ion-app *ngIf="data">
+<ion-header>
+  <ion-toolbar color="dark">
+    <div class="flex">
+  <div (click)="dismiss()" *ngIf="arrow"><ion-icon name="arrow-back-outline"></ion-icon></div>
+    <div (click)="back()" *ngIf="!arrow"><ion-icon name="arrow-back-outline"></ion-icon></div>
+  <div *ngIf="item"><ion-title class="center">MY PRODUCTS</ion-title></div>
+  <div *ngIf="add_product"><ion-title class="center">ADD PRODUCT</ion-title></div>
+  <div *ngIf="add_service"><ion-title class="center">ADD SERVICE</ion-title></div>
+  <div *ngIf="product_full"><ion-title class="center">FULL DETAILS</ion-title></div>
+    <div *ngIf="edit_service || edit_product">
+      <ion-button color="light" (click)="discount()" *ngIf="!promo">Run sales discount</ion-button>
+        <ion-button color="light" (click)="cancel_discount()" *ngIf="promo">Cancel discount</ion-button>
+    </div>
+  </div>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="item">
+  <div class="center">
+<div>
+<div *ngIf="empty">
+  <i>No items added to store yet!</i>
+</div>
+  <div *ngIf='!empty'>
+  <ion-card *ngFor="let items of product_lists let i=index">
+    <ion-card-header>
+  <div class="center">
+  <ion-img [src]="items.images"></ion-img>
+  </div>
+      <ion-card-title>{{items.product_name}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+  <div class="cent">
+<p>Total Item(s): {{items.amount}}</p>
+<p>Total Sold: {{items.amount_sold}}</p>
+<p>Item type: {{items.item_type}}</p>
+  </div>
+  <div class="flex-fl">
+    <ion-button color="danger" (click)="confirm_delete(items.item_id)">Delete Item</ion-button>
+    <ion-button color="success" (click)="details(items.item_id, i)">Full Details</ion-button>
+      <ion-button color="success" (click)="edit(items.item_id, items.item_type,items.promo)">Edit</ion-button>
+
+  </div>
+      </ion-card-content>
+    </ion-card>
+    </div>
+    </div>
+    </div>
+</ion-content>
+
+
+<ion-content *ngIf="add_product">
+<div class="">
+  <ion-item>
+  <ion-label color="success">
+  Product Name
+  </ion-label>
+  <ion-input type="text" [(ngModel)]="name"></ion-input>
+</ion-item>
+
+<ion-item>
+<ion-label color="success">
+Total product stocked
+</ion-label>
+<ion-input type="text" [(ngModel)]="total"></ion-input>
+</ion-item>
+
+<div class="grid_center">
+  <ion-item>
+  <ion-label>Add shipping</ion-label><ion-checkbox [(ngModel)]="ship" (click)="shipping()"></ion-checkbox>
+  </ion-item>
+<ion-button (click)="delivery_service()">
+Add other delivery options
+</ion-button>
+
+<i class="align-center t_small">Click added options to remove</i>
+<div>
+  <div *ngIf="!deliveries.length==0 || deliveries.length===null">
+<div class="" *ngFor="let items of deliveries; let i=index">
+  <div class="bg margin" (click)="remove_cat(i)">
+    <strong>{{items.name}} : {{items.price}}</strong>
+  </div>
+  </div>
+  </div>
+  <div class="" *ngIf="deliveries.lenght==0">
+    <i class="align-center t_small">You do not have any pre saved delivery options</i>
+  </div>
+</div>
+</div>
+
+<ion-item>
+<ion-label color="success">
+Price per stock
+</ion-label>
+<ion-input type="number" [(ngModel)]="price"></ion-input>
+</ion-item>
+
+<ion-item>
+<ion-textarea rows="2" cols="5" placeholder="Enter product description here..." [(ngModel)]="description"></ion-textarea>
+</ion-item>
+
+
+<ion-item>
+  <ion-label color="success">
+Select a category
+</ion-label>
+<ion-select placeholder="pick product category" [(ngModel)]="cate">
+  <ion-select-option *ngFor="let category of categories" value="{{category.category_id}}">{{category.category}}</ion-select-option>
+  </ion-select>
+</ion-item>
+
+<ion-item>
+  <ion-label color="success">
+  Select a sub category
+  </ion-label>
+
+  <ion-select placeholder="pick product sub_category" [(ngModel)]="sub_cate">
+    <ng-container *ngFor="let cates of sub_category" >
+    <ion-select-option value="{{cates.id}}" *ngIf="cates.parent_id===cate">{{cates.name}}</ion-select-option>
+    </ng-container>
+    </ion-select>
+</ion-item>
+
+<ion-item *ngIf="sub_cate<12 || sub_cate==12">
+  <ion-label color="success">
+  Select a sub_category belonging to the above
+  </ion-label>
+
+  <ion-select placeholder="pick product sub_category" [(ngModel)]="sub_sub_cate">
+    <ng-container *ngFor="let cater of sub_sub_category" >
+    <ion-select-option value="{{cater.id}}" *ngIf="cater.parent_id===sub_cate">{{cater.name}}</ion-select-option>
+    </ng-container>
+    </ion-select>
+</ion-item>
+
+<!-- product color manipulate -->
+<div class="grid_center">
+<ion-button (click)="add_options()">Create Options e.g Colors e.t.c</ion-button>
+<i>Cick to remove</i>
+<div class="shadow margin" *ngFor="let option of options; let i=index;">
+  <div (click)="remove_options(i)">
+  <div class="">
+{{option.name}}: {{option[option.name]}}
+  </div>
+  </div>
+</div>
+</div>
+
+<!-- add image, different platform, different upload pattern -->
+<div class="">
+  <!-- <input type="file" accept="image/*" id="upload" (change)="add_image($event)"> -->
+<div class="center">
+  <div class="upload-btn-wrapper">
+    <button class="btn">Upload Image</button>
+    <p>Click on image to remove</p>
+    <input type="file" accept="image/*" id="upload" (change)="add_image($event)"/>
+  </div>
+</div>
+
+
+<div *ngFor="let image of disp; let i=index" class="center">
+  <div (click)="remove(i)"><ion-img [src]="image"></ion-img></div>
+  </div>
+</div>
+
+<div class="center">
+<ion-button color="dark" (click)="uploader()">
+Upload Product
+</ion-button>
+</div>
+
+
+</div>
+</ion-content>
+
+<!-- add service here -->
+<ion-content *ngIf="add_service">
+<div class="">
+  <ion-item>
+  <ion-label color="success">
+Name of service
+  </ion-label>
+  <ion-input type="text" [(ngModel)]="s_name" placeholder='e.g creative design'></ion-input>
+</ion-item>
+
+
+<ion-item>
+<ion-label color="success">
+Days to deliver
+</ion-label>
+<ion-input type="text" [(ngModel)]="s_delivery" placeholder="How long will it take to deliver"></ion-input>
+</ion-item>
+
+<ion-item>
+<ion-label color="success">
+Your price
+</ion-label>
+<ion-input type="number" [(ngModel)]="s_price"></ion-input>
+</ion-item>
+
+<ion-item>
+<ion-textarea rows="2" cols="5" placeholder="Describe your service in details" [(ngModel)]="s_description"></ion-textarea>
+</ion-item>
+
+<!-- add delivery package -->
+<div class="grid_center">
+  <ion-item>
+  <ion-label>Add shipping</ion-label><ion-checkbox [(ngModel)]="ship" (click)="shipping()"></ion-checkbox>
+  </ion-item>
+
+<ion-button (click)="delivery_service()">
+Delivery options
+</ion-button>
+<i class="align-center">click to remove</i>
+<div class="" *ngFor="let items of deliveries; let i=index">
+  <div class="bg margin" (click)="remove_cat(i)">
+    <strong>{{items.name}} : {{items.price}}</strong>
+  </div>
+</div>
+</div>
+
+<ion-item>
+  <ion-label color="success">
+Select a category
+</ion-label>
+<ion-select placeholder="Select services" [(ngModel)]="s_cate">
+  <ion-select-option *ngFor="let category of categories" value="{{category.category_id}}">{{category.category}}</ion-select-option>
+  </ion-select>
+</ion-item>
+
+<ion-item>
+  <ion-label color="success">
+  Select a sub category
+  </ion-label>
+
+  <ion-select placeholder="pick product sub_category" [(ngModel)]="s_sub_cate">
+    <ng-container *ngFor="let cates of sub_category" >
+    <ion-select-option value="{{cates.id}}" *ngIf="cates.parent_id===s_cate">{{cates.name}}</ion-select-option>
+    </ng-container>
+    </ion-select>
+</ion-item>
+
+<!-- add image, different platform, different upload pattern -->
+<div class="">
+  <div class="center">
+    <div class="upload-btn-wrapper">
+      <button class="btn">Upload Image</button>
+      <input type="file" accept="image/*" id="upload" (change)="add_image($event)"/>
+    </div>
+  </div>
+<div *ngFor="let image of disp" class="center">
+  <div (click)="remove(i)"><ion-img [src]="image"></ion-img></div>
+  </div>
+</div>
+
+<div class="center">
+<ion-button color="dark" (click)="uploader_s()">
+Upload your service
+</ion-button>
+</div>
+
+
+</div>
+</ion-content>
+
+<!-- editing product or services starts here -->
+<ion-content *ngIf="edit_product">
+<div class="">
+  <ion-item>
+  <ion-label color="success">
+  Product Name
+  </ion-label>
+  <ion-input type="text" [(ngModel)]="name"></ion-input>
+</ion-item>
+
+<ion-item>
+<ion-label color="success">
+Total product stocked
+</ion-label>
+<ion-input type="text" [(ngModel)]="total"></ion-input>
+</ion-item>
+
+<div class="grid_center">
+  <ion-item>
+  <ion-label>Edit shipping</ion-label><ion-checkbox [(ngModel)]="ship" (click)="shipping()"></ion-checkbox>
+  </ion-item>
+  <i class="align-center">If you want to enter a new shippig details, delete the existing by clicking on the shipping delivery option</i>
+<ion-button (click)="delivery_service()">
+Add Delivery options
+</ion-button>
+<i class="align-center">Available deliveries (click to remove)</i>
+<div class="" *ngFor="let items of deliveries; let i=index">
+  <div class="bg margin" (click)="remove_cat(i)">
+    <strong>{{items.name}} : {{items.price}}</strong>
+  </div>
+</div>
+</div>
+
+<ion-item>
+<ion-label color="success">
+Price per stock
+</ion-label>
+<ion-input type="number" [(ngModel)]="price"></ion-input>
+</ion-item>
+
+<ion-item>
+<ion-textarea rows="2" cols="5" placeholder="Enter product description here..." [(ngModel)]="description"></ion-textarea>
+</ion-item>
+
+
+<ion-item>
+  <ion-label color="success">
+Select a category
+</ion-label>
+<ion-select placeholder="pick product category" [(ngModel)]="cate">
+  <ion-select-option *ngFor="let category of categories" value="{{category.category_id}}">{{category.category}}</ion-select-option>
+  </ion-select>
+</ion-item>
+
+<ion-item>
+  <ion-label color="success">
+  Select a sub category
+  </ion-label>
+
+  <ion-select placeholder="pick product sub_category" [(ngModel)]="sub_cate">
+    <ng-container *ngFor="let cates of sub_category" >
+    <ion-select-option value="{{cates.id}}" *ngIf="cates.parent_id===cate">{{cates.name}}</ion-select-option>
+    </ng-container>
+    </ion-select>
+</ion-item>
+
+<ion-item *ngIf="sub_cate<12 || sub_cate==12">
+  <ion-label color="success">
+  Select a sub_category belonging to the above
+  </ion-label>
+
+  <ion-select placeholder="pick product sub_category" [(ngModel)]="sub_sub_cate">
+    <ng-container *ngFor="let cater of sub_sub_category" >
+    <ion-select-option value="{{cater.id}}" *ngIf="cater.parent_id===sub_cate">{{cater.name}}</ion-select-option>
+    </ng-container>
+    </ion-select>
+</ion-item>
+
+<!-- product color manipulate -->
+<div class="grid_center">
+<ion-button (click)="add_options()">Create Options e.g color, size etc</ion-button>
+<p>Click to remove</p>
+
+<div class="shadow margin" *ngFor="let option of options; let i=index;">
+  <div class="" (click)="remove_options(i)">
+  <div class="">
+{{option.name}} : {{option[option.name]}}
+  </div>
+  </div>
+</div>
+</div>
+
+<!-- add image, different platform, different upload pattern -->
+<div class="">
+  <!-- <input type="file" accept="image/*" id="upload" (change)="add_image($event)"> -->
+<div class="center">
+  <div class="upload-btn-wrapper">
+    <button class="btn">Upload Image</button>
+    <p>Click on image to remove</p>
+    <input type="file" accept="image/*" id="upload" (change)="add_image($event)"/>
+  </div>
+</div>
+
+
+<div *ngFor="let image of disp; let i=index" class="center">
+  <div (click)="remove(i)"><ion-img [src]="image"></ion-img></div>
+  </div>
+</div>
+
+<div class="center">
+<ion-button color="dark" (click)="upload_product_edit()">
+Upload Product
+</ion-button>
+</div>
+
+
+</div>
+</ion-content>
+<!-- editing the productr ends here -->
+
+<!-- editing service starts here -->
+<ion-content *ngIf="edit_service">
+<div class="">
+  <ion-item>
+  <ion-label color="success">
+Name of service
+  </ion-label>
+  <ion-input type="text" [(ngModel)]="s_name" placeholder='e.g creative design'></ion-input>
+</ion-item>
+
+
+<ion-item>
+<ion-label color="success">
+Days to deliver
+</ion-label>
+<ion-input type="text" [(ngModel)]="s_delivery" placeholder="How long will it take to deliver"></ion-input>
+</ion-item>
+
+<ion-item>
+<ion-label color="success">
+Your price
+</ion-label>
+<ion-input type="number" [(ngModel)]="s_price"></ion-input>
+</ion-item>
+
+<ion-item>
+<ion-textarea rows="2" cols="5" placeholder="Describe your service in details" [(ngModel)]="s_description"></ion-textarea>
+</ion-item>
+
+<!-- add delivery package -->
+<div class="grid_center">
+  <ion-item>
+  <ion-label>Add shipping</ion-label><ion-checkbox [(ngModel)]="ship" (click)="shipping()"></ion-checkbox>
+  </ion-item>
+
+<ion-button (click)="delivery_service()">
+Delivery options
+</ion-button>
+<i class="align-center">click to remove</i>
+<div class="" *ngFor="let items of deliveries; let i=index">
+  <div class="bg margin" (click)="remove_cat(i)">
+    <strong>{{items.name}} : {{items.price}}</strong>
+  </div>
+</div>
+</div>
+
+
+<ion-item>
+  <ion-label color="success">
+Select a category
+</ion-label>
+<ion-select placeholder="Select services" [(ngModel)]="s_cate">
+  <ion-select-option *ngFor="let category of categories" value="{{category.category_id}}">{{category.category}}</ion-select-option>
+  </ion-select>
+</ion-item>
+
+<ion-item>
+  <ion-label color="success">
+  Select a sub category
+  </ion-label>
+
+  <ion-select placeholder="pick product sub_category" [(ngModel)]="s_sub_cate">
+    <ng-container *ngFor="let cates of sub_category" >
+    <ion-select-option value="{{cates.id}}" *ngIf="cates.parent_id===s_cate">{{cates.name}}</ion-select-option>
+    </ng-container>
+    </ion-select>
+</ion-item>
+
+
+
+<!-- add image, different platform, different upload pattern -->
+<div class="">
+  <div class="center">
+    <div class="upload-btn-wrapper">
+      <button class="btn">Upload Image</button>
+      <input type="file" accept="image/*" id="upload" (change)="add_image($event)"/>
+    </div>
+  </div>
+<div *ngFor="let image of disp; let i=index" class="center">
+  <div (click)="remove(i)"><ion-img [src]="image"></ion-img></div>
+  </div>
+</div>
+
+<div class="center">
+<ion-button color="dark" (click)="uploader_edit_service()">
+Upload your service
+</ion-button>
+</div>
+
+
+</div>
+</ion-content>
+
+<!-- editing services ends here -->
+
+<!-- displaying full products details start here -->
+<ion-content *ngIf="product_full">
+  <ion-card *ngFor="let item of new_items">
+    <ion-card-header>
+<!-- image slides here -->
+<ion-slides pager="true" [options]="slideOptsMobile">
+       <ion-slide  *ngFor="let images of item.images">
+  <div class="shadow"><ion-img [src]="images"></ion-img></div>
+       </ion-slide>
+     </ion-slides>
+
+
+
+      <ion-card-subtitle>Cost: {{item.price|currency:"NGN"}}</ion-card-subtitle>
+      <ion-card-title>{{item.name}}</ion-card-title>
+    </ion-card-header>
+      <ion-card-content>
+        <strong><i>Item description</i></strong>
+    <p>  {{item.description}}</p>
+
+    <div color="dark">
+  <div>
+      <div class="">
+        <strong>Available Options</strong>
+      </div>
+<div class="grid" *ngFor="let option of item.options">
+<div><i>{{option.name}}: {{option[option.name]}}</i></div>
+</div>
+  </div>
+
+  <div>
+      <div class="">
+        <strong>Available Delivery Modes</strong>
+      </div>
+<div class="grid" *ngFor="let option of item.delivery">
+<div><i>{{option.name}} | {{option.price|currency:"NGN"}}</i></div>
+</div>
+  </div>
+<div class="" *ngIf="shiper.length!==0">
+  <div class="">
+    <strong>SHIPPING DETAILS</strong>
+  </div>
+  <div class="" *ngFor="let option of shiper">
+    <div><i>UPC: {{option.upc}}</i></div>
+    <div><i>SKU: {{option.sku}}</i></div>
+  </div>
+</div>
+
+  <div class="">
+    <div class="">
+      <strong>Number of Items stocked</strong>
+    </div>
+    <div class="">
+      {{item.total}}
+    </div>
+  </div>
+
+  <!-- if promo exists -->
+  <div class="" *ngFor="let promo of new_list">
+    <div *ngIf="promo.promo==='1'">
+    <div class="">
+      <strong>Promotion on</strong>
+    </div>
+    <div class="">
+    Name: {{promo.promo_name}}
+    </div>
+    <div class="">
+    Price: {{promo.promo_price}}
+    </div>
+    <div class="">
+    Start date: {{promo.start_date}}
+    </div>
+    <div class="">
+    End date: {{promo.end_date}}
+    </div>
+  </div>
+  </div>
+  </div>
+      </ion-card-content>
+    </ion-card>
+</ion-content>
+<!-- displaying full products details ends here -->
+
+
+<!-- services full details here -->
+<ion-content *ngIf="service_full">
+  <ion-card *ngFor="let item of new_items">
+    <ion-card-header>
+<!-- image slides here -->
+<ion-slides pager="true" [options]="slideOptsMobile">
+       <ion-slide  *ngFor="let images of item.images">
+  <div class="shadow"><ion-img [src]="images"></ion-img></div>
+       </ion-slide>
+     </ion-slides>
+
+
+
+      <ion-card-subtitle>Cost: {{item.price|currency:"NGN"}}</ion-card-subtitle>
+      <ion-card-title>{{item.name}}</ion-card-title>
+    </ion-card-header>
+      <ion-card-content>
+        <strong><i>Service description</i></strong>
+    <p>  {{item.description}}</p>
+
+    <div color="dark">
+  <div>
+      <div class="">
+        <strong>Available Delivery Modes</strong>
+      </div>
+<div class="grid" *ngFor="let option of item.delivery">
+<div><i>{{option.name}} | {{option.price|currency:"NGN"}}</i></div>
+</div>
+  </div>
+
+  <div class="" *ngIf="shiper.length!==0">
+    <div class="">
+      <strong>SHIPPING DETAILS</strong>
+    </div>
+    <div class="" *ngFor="let option of shiper">
+      <div><i>UPC: {{option.upc}}</i></div>
+      <div><i>SKU: {{option.sku}}</i></div>
+    </div>
+  </div>
+  </div>
+
+  <!-- if promo exists -->
+  <div class="" *ngFor="let promo of new_list">
+    <div *ngIf="promo.promo==='1'">
+    <div class="">
+      <strong>Promotion on</strong>
+    </div>
+    <div class="">
+    Name: {{promo.promo_name}}
+    </div>
+    <div class="">
+    Price: {{promo.promo_price}}
+    </div>
+    <div class="">
+    Start date: {{promo.start_date}}
+    </div>
+    <div class="">
+    End date: {{promo.end_date}}
+    </div>
+  </div>
+  </div>
+      </ion-card-content>
+    </ion-card>
+</ion-content>
+<!-- displaying full services details ends here -->
+<div id="adds">
+<ion-footer *ngIf="item">
+<ion-toolbar color="dark" class="point" (click)="upload()">
+<ion-title class="align-center">ADD ITEM</ion-title>
+  </ion-toolbar>
+  </ion-footer>
+  </div>
+</ion-app>
+
+
+<!-- Skeleton screen -->
+<div *ngIf="!data">
+  <div class="ion-padding custom-skeleton">
+    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+    <ion-skeleton-text animated></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+  </div>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>
+        <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
+      </ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-avatar slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-avatar>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-thumbnail slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-thumbnail>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-skeleton-text animated style="width: 27px; height: 27px" slot="start"></ion-skeleton-text>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</div>

@@ -1,0 +1,7 @@
+{
+  "name": "poncube",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

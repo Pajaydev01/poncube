@@ -1,0 +1,49 @@
+<ion-content>
+<div class="" [ngStyle]="{'background-image':'url('+img+')','width':'100%', 'height':'100%','background-position':'center','background-size':'contain','background-repeat':'no-repeat','border-radius':'50px'}">
+</div>
+</ion-content>
+<ion-footer class="green">
+  <div class="" *ngIf="view==='first'">
+  <div class="" class="text" *ngIf="show1">
+    <strong><h1 class="welcome">WELCOME TO PONCUBE!</h1></strong>
+    <i class="hint">A platform that covers it all..</i>
+  </div>
+
+  <div class="" class="text" *ngIf="show2">
+    <strong><ion-card-title>EARN EVERYDAY!</ion-card-title></strong>
+    <p>Become a seller and make tons of profit selling your products</p>
+  </div>
+
+  <div class="" class="text" *ngIf="show3">
+    <strong><ion-card-title>RECHARGE, SPEND AND SEND MONEY TO YOUR FRIENDS</ion-card-title></strong>
+    <p>Recharge your wallet for purchase and also transfer to your friends</p>
+  </div>
+
+  <div class="item">
+    <ion-button color="light" size="small" (click)="dismiss()" *ngIf="show1">
+      Skip
+    </ion-button>
+    <ion-button color="light" size="small" (click)="next()" *ngIf="show1">
+      Next
+    </ion-button>
+
+<div *ngIf="show2"></div>
+    <ion-button color="light" size="small" (click)="next_2()" *ngIf="show2">
+      Next
+    </ion-button>
+
+    <ion-button color="light" size="small" (click)="next()" *ngIf="show3">
+      Previous
+    </ion-button>
+    <ion-button color="light" size="small" (click)="dismiss()" *ngIf="show3">
+      Close
+    </ion-button>
+  </div>
+  </div>
+
+  <div class="text" *ngIf="view==='second'">
+    <p>
+To add a product or service, click on <i>'Add item'</i>, then select one of which you want to add
+    </p>
+  </div>
+  </ion-footer>

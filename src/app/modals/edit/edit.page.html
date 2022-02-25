@@ -1,0 +1,114 @@
+<ion-app>
+<ion-header>
+  <ion-toolbar>
+    <ion-title (click)="dismiss()">
+
+<ion-icon name="arrow-back-outline"></ion-icon>
+  Dismiss
+  </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+<!-- edit profile here -->
+  <ion-card *ngIf="type=='customer'">
+    <ion-card-header class="center">
+      <ion-card-title>Edit your details</ion-card-title>
+    </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+        <ion-label color="success">
+        Firstname
+        </ion-label>
+        <ion-input type="text" [(ngModel)]="firstname"></ion-input>
+      </ion-item>
+
+      <ion-item>
+      <ion-label color="success">
+      Lastname
+      </ion-label>
+      <ion-input type="text" [(ngModel)]="lastname"></ion-input>
+    </ion-item>
+
+    <ion-item>
+    <ion-label color="success">
+    Phone Number(Start with country code)
+    </ion-label>
+    <ion-input type="text" [(ngModel)]="phone"></ion-input>
+  </ion-item>
+
+    <ion-item>
+    <ion-label color="success">
+    Email
+    </ion-label>
+    <ion-input type="text" [(ngModel)]="email"></ion-input>
+  </ion-item>
+
+    <ion-item>
+    <ion-label color="success">
+    Address
+    </ion-label>
+    <ion-input type="text" [(ngModel)]="address"></ion-input>
+  </ion-item>
+
+<div class="cent">
+  <ion-button (click)="edit()" color="light" expand="block" shape="round">Update details</ion-button>
+</div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- edit shop here -->
+    <ion-card *ngIf="type=='seller'">
+      <ion-card-header class="center">
+        <ion-card-title>Edit your shop details</ion-card-title>
+      </ion-card-header>
+        <ion-card-content>
+          <ion-item>
+          <ion-label color="success">
+        Shop name
+          </ion-label>
+          <ion-input type="text" [(ngModel)]="shop_name"></ion-input>
+        </ion-item>
+
+        <ion-item>
+        <ion-label color="success">
+        Shop Caption
+        </ion-label>
+        <ion-input type="text" [(ngModel)]="caption"></ion-input>
+      </ion-item>
+
+      <ion-item>
+      <ion-label color="success">
+    Facebook link
+      </ion-label>
+      <ion-input type="text" [(ngModel)]="fb"></ion-input>
+    </ion-item>
+    <ion-item>
+    <ion-label color="success">
+    Instagram link
+    </ion-label>
+    <ion-input type="text" [(ngModel)]="ig"></ion-input>
+  </ion-item>
+  <ion-item>
+  <ion-label color="success">
+  Twitter link
+  </ion-label>
+  <ion-input type="text" [(ngModel)]="tw"></ion-input>
+</ion-item>
+
+      <ion-item>
+      <!-- <ion-label color="success">
+      Full details
+      </ion-label> -->
+      <ion-textarea type="text" [(ngModel)]="details" cols='10' rows="10"></ion-textarea>
+    </ion-item>
+
+  <div class="cent">
+    <ion-button (click)="edit_shop()" color="light" expand="block" shape="round">Update details</ion-button>
+  </div>
+        </ion-card-content>
+      </ion-card>
+
+</ion-content>
+</ion-app>

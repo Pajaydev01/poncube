@@ -1,0 +1,161 @@
+<ion-app>
+<ion-header>
+  <ion-toolbar>
+    <div class="flex">
+  <div (click)="dismiss()"><ion-icon name="arrow-back-outline"></ion-icon></div>  <ion-title class="center">Checkout</ion-title>
+  </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="product">
+<ion-card>
+  <ion-card-header>
+
+<i>Slide to view multiple images</i>
+<ion-slides pager="true" [options]="slideOptions">
+   <ion-slide  *ngFor="let images of image">
+<div><ion-img [src]="images"></ion-img></div>
+   </ion-slide>
+ </ion-slides>
+
+    <ion-card-subtitle>{{price*rate_value |currency:currency}} Per Unit</ion-card-subtitle>
+    <ion-card-title>{{name}}</ion-card-title>
+  </ion-card-header>
+    <ion-card-content>
+    {{description}}
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title  class="center">
+            Seller's Information
+          </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="side">
+          <div class="" [ngStyle]="{'background-image':'url('+dp+')','width':'110px', 'height':'110px','background-position':'center','background-size':'cover','background-repeat':'no-repeat','border-radius':'70px'}"></div>
+
+          <p>Seller's Name: {{seller_name}}</p>
+          <p>Seller's Mobile: {{seller_mobile}}</p>
+          <p>Seller's Mail: {{seller_mail}}</p>
+          <p>Seller's Address: {{seller_address}}</p>
+          <ion-card-subtitle>
+          <strong>  Store Rating: <span *ngFor="let star of rating; let i=index;">
+        <ion-icon name="star" [style.color]="raty.rates[i]==i?'green':''">
+        </ion-icon>
+          </span>
+        </strong>
+            </ion-card-subtitle>
+        <div class="cent"><ion-button color="success" (click)="check_store(store_id)">View Store</ion-button></div>
+        </div>
+        </ion-card-content>
+        </ion-card>
+
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title  class="center">
+              Check out
+              </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="">
+              Total Item: {{unit}}
+            </div>
+
+            <div class="">
+          Total Price: {{total*rate_value|currency:currency}} with delivery fee
+              </div>
+
+              <div class="">
+                <strong><i>Selected Options</i></strong>
+                <div  *ngFor="let item of options">
+                <div class="">
+                 Preferred Option: {{item.option}} | Choice: {{item.choice}}
+                </div>
+                 </div>
+              </div>
+
+
+
+  <div class="cent">  <ion-button color="primary" (click)="purchase()">Confirm Purchase {{total*rate_value|currency:currency}}</ion-button></div>
+
+            </ion-card-content>
+            </ion-card>
+
+    </ion-card-content>
+  </ion-card>
+
+
+</ion-content>
+
+<ion-content *ngIf="service">
+<ion-card>
+  <ion-card-header>
+
+<i>Slide to view multiple images</i>
+<ion-slides pager="true" [options]="slideOptions">
+   <ion-slide  *ngFor="let images of image">
+<div><ion-img [src]="images"></ion-img></div>
+   </ion-slide>
+ </ion-slides>
+
+    <ion-card-subtitle>{{price*rate_value|currency:currency}} Per Unit</ion-card-subtitle>
+    <ion-card-title>{{name}}</ion-card-title>
+  </ion-card-header>
+    <ion-card-content>
+    {{description}}
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title  class="center">
+            Seller's Information
+          </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="side">
+          <div class="" [ngStyle]="{'background-image':'url('+dp+')','width':'110px', 'height':'110px','background-position':'center','background-size':'cover','background-repeat':'no-repeat','border-radius':'70px'}"></div>
+          <p>Seller's Name: {{seller_name}}</p>
+          <p>Seller's Mobile: {{seller_mobile}}</p>
+          <p>Seller's Mail: {{seller_mail}}</p>
+          <p>Seller's Address: {{seller_address}}</p>
+          <ion-card-subtitle>
+          <strong>  Store Rating: <span *ngFor="let star of rating; let i=index;">
+        <ion-icon name="star" [style.color]="raty.rates[i]==i?'green':''">
+        </ion-icon>
+          </span>
+        </strong>
+            </ion-card-subtitle>
+        <div class="cent">  <ion-button color="success" (click)="check_store(store_id)">View store</ion-button></div>
+        </div>
+        </ion-card-content>
+        </ion-card>
+
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title  class="center">
+              Check out
+              </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="">
+              Service specifications: {{unit}}
+            </div>
+
+            <div class="">
+          Total Price: {{total*rate_value|currency:currency}} with delivery fee
+              </div>
+
+  <div class="cent">  <ion-button color="primary" (click)="purchase()">Confirm Order {{total*rate_value|currency:currency}}</ion-button></div>
+
+            </ion-card-content>
+            </ion-card>
+
+    </ion-card-content>
+  </ion-card>
+
+
+</ion-content>
+
+
+</ion-app>

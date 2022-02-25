@@ -1,0 +1,162 @@
+<ion-app>
+  <ion-menu side="start" menuId="sell_menu" contentId="main">
+    <ion-header>
+      <ion-toolbar color="success">
+        <ion-title>Shop Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item>
+          <h3>Total Earnings: {{balance | currency:'NGN':'symbol-narrow'}}</h3>
+  </ion-item>
+  <ion-item>
+          <ion-button color="dark" (click)="withdraw()">Withdraw to account</ion-button>
+        </ion-item>
+
+        <ion-item>
+                <ion-button color="danger">Delete Account</ion-button>
+              </ion-item>
+
+              <ion-item>
+                      <ion-button color="light" (click)="add_account()">Add/edit bank details</ion-button>
+                    </ion-item>
+
+                  <ion-item>
+                    <ion-button size="small" (click)="edit()" class="" color="success">EDIT DETAILS</ion-button>
+                    </ion-item>
+
+                    <ion-item>
+<ion-label>Switch guides</ion-label>
+<ion-toggle color="success" [(ngModel)]="checker" (ionChange)="help()"></ion-toggle>
+                      </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="main" ></ion-router-outlet>
+
+
+
+<ion-header [translucent]="true" >
+  <ion-toolbar>
+
+  <div class="">
+    <div class="header">
+              <ion-button size="small" (click)="router('/tabs/tab3')" class=""><ion-icon name="arrow-back-outline"></ion-icon>MY PROFILE</ion-button>
+                <!-- <ion-button size="small" (click)="reg('login')" class="">HOME</ion-button>
+                  <ion-button size="small" (click)="reg('login')" class="">LOG OUT</ion-button> -->
+          </div>
+
+    <div class="p-t">
+        <div class="center">
+        <div class="logo" (click)="router('/tabs/tab1')">
+<img src="assets/images/logo.png">
+        </div>
+          </div>
+          <!-- search for browser -->
+          <!-- <div class="">
+      <div class="browser">
+        <ion-searchbar showCancelButton="focus" placeholder="Search poncube" class="align-center" [(ngModel)]="search" (ionChange)="searchs()" debounce="0" class="searchbar" (click)="scroll()"></ion-searchbar>
+        </div>
+
+          </div> -->
+</div>
+</div>
+
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true" #content>
+  <!-- side menu here -->
+  <ion-grid >
+    <ion-row>
+      <ion-col class="">
+    <div (click)="openFirst()">
+      <ion-icon name="menu"  (click)="openFirst()"></ion-icon>
+    </div>
+
+    </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col class="align-center">
+  <ion-title >MY SHOP</ion-title>
+    </ion-col>
+  </ion-row>
+<ion-row>
+  <ion-col class="center">
+<div>
+
+  <ion-card-content>
+    Rating: <span *ngFor="let star of rating; let i=index;">
+<ion-icon name="star" [style.color]="rates.rates[i]==i?'green':''"></ion-icon>
+      </span>
+    </ion-card-content>
+</div>
+</ion-col>
+</ion-row>
+
+    <ion-row color="">
+      <!-- shop owner's profile -->
+      <ion-col class="">
+        <ion-card >
+           <div class="center">
+             <div class="upload-btn-wrapper img-crv">
+               <ion-img src="{{shop_dp}}" alt="{{userImage}}" #imgs>
+               </ion-img>
+             <input type="file" accept="image/*" id="upload" (change)="add_image($event)"/>
+             </div>
+           </div>
+
+
+           <ion-card-header class="align-center">
+             <ion-card-title>{{shop_name}}</ion-card-title>
+                <ion-card-subtitle>{{caption}}</ion-card-subtitle>
+           </ion-card-header>
+           <div class="center">
+           <ion-card-content class="align-left wrp">
+             {{shop_details}}
+             </ion-card-content>
+             </div>
+         </ion-card>
+        </ion-col>
+    </ion-row>
+
+<!-- action buttons -->
+<ion-row>
+    <ion-col class="" (click)="products()">
+      <div id="pro_1">
+      <ion-card  color="success">
+
+         <ion-card-header class="align-center">
+
+           <ion-card-title >
+              <div><h1>{{product_count}}</h1></div></ion-card-title>
+              <ion-card-subtitle class="grid"> <div>
+                     <ion-icon class="icons" name="bag-handle-outline"></ion-icon>
+                 </div>
+                 <div>My Products</div></ion-card-subtitle>
+         </ion-card-header>
+       </ion-card>
+       </div>
+      </ion-col>
+
+      <ion-col class="">
+        <ion-card color="success" (click)="get_orders()" id="pro_2">
+
+           <ion-card-header class="align-center">
+
+             <ion-card-title >
+                <div><h1>{{order_count}}</h1></div></ion-card-title>
+                <ion-card-subtitle class="grid"> <div>
+                       <ion-icon class="icons" name="bag-handle-outline"></ion-icon>
+                   </div>
+                   <div>Active Orders</div></ion-card-subtitle>
+           </ion-card-header>
+         </ion-card>
+        </ion-col>
+</ion-row>
+
+  </ion-grid>
+</ion-content>
+</ion-app>

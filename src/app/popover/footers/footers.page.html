@@ -1,0 +1,65 @@
+<ion-content>
+<ion-list *ngIf="information">
+<ion-item (click)="route('about')">
+About Us
+  </ion-item>
+  <ion-item (click)="route('delivery')">
+    Delivery information
+    </ion-item>
+    <ion-item (click)="route('privacy')">
+      Privacy policy
+      </ion-item>
+      <ion-item (click)="route('terms')">
+        Terms and Condition
+        </ion-item>
+        <ion-item (click)="route('faq')">
+        FAQ
+          </ion-item>
+          </ion-list>
+
+          <ion-list *ngIf="c_service">
+          <ion-item>
+          Contact Us
+            </ion-item>
+            <ion-item>
+              Returns
+              </ion-item>
+              <ion-item>
+              Site map
+                </ion-item>
+                </ion-list>
+
+                <ion-list *ngIf="extra">
+                <ion-item>
+              ....
+                  </ion-item>
+                  <ion-item>
+                    ....
+                    </ion-item>
+                    <ion-item>
+                    ....
+                      </ion-item>
+                      </ion-list>
+
+                      <ion-list *ngIf="menu">
+
+                          <div class="center">
+                          <div><img src={{dp}} class="dp"></div>
+                          </div>
+
+                          <p class="sm-center">{{name}}</p>
+
+                      <ion-item (click)="route('tabs/tab3')">
+                      MY PROFILE
+                        </ion-item>
+                        <ion-item (click)="logout()">
+                        LOGOUT
+                          </ion-item>
+                            </ion-list>
+                            <ion-card *ngIf="type==='shipping'">
+                              <ion-card-header>
+                                <ion-card-subtitle *ngIf="address=='nil'">Not available, please check later</ion-card-subtitle>
+                                  <ion-card-subtitle *ngIf="address!='nil'">{{address}}</ion-card-subtitle>
+                                </ion-card-header>
+                              </ion-card>
+                      </ion-content>

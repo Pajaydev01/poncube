@@ -1,0 +1,164 @@
+ion-app{
+  @media (min-width: 700px) {
+    .mobile {
+    display: none;
+      }
+  }
+  @media (max-width: 800px) {
+    .browser {
+    display: none;
+      }
+
+  }
+.align-center{
+  text-align: center;
+}
+.flex{
+  display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
+  justify-content: space-evenly;
+}
+.flex_2{
+  display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
+  justify-content: space-between;
+}
+.grid{
+  display: grid;
+}
+.flex-fl{
+  display: flex;
+  justify-content: space-between;
+}
+.center{
+  text-align: center;
+}
+.f-rnd{
+  display: flex;
+  justify-content: space-between;
+}
+.options{
+  padding:10px;
+  margin:10px;
+  border:1px solid black;
+  text-decoration: none;
+}
+.cent{
+  display: grid;
+  justify-content: center;
+}
+.cent-l{
+  display: grid;
+  justify-content: center;
+}
+ion-img{
+  width: 240px;
+  height:240px;
+}
+.shadow{
+  width: 500px;
+  height: 100px;
+}
+ion-slides{
+  height:500%;
+}
+.imgs{
+  width:500px;
+  height:450px;
+}
+.back{
+  position: absolute;
+  top: 16%;
+  left: 500px;
+  z-index: 2;
+}
+.c-red{
+  color: red;
+}
+.p-b{
+  padding-top: 20px;
+}
+.red{
+  color: red;
+}
+.p-g{
+padding: 20px;
+}
+.l_1{
+padding: 1px;
+width: 30%;
+border-bottom: 1px solid black;
+}
+.green{
+  color:green;
+}
+.t_s{
+  font-size: 10px;
+}
+.b-r{
+  border: 1px solid black;
+  border-radius: 10px;
+}
+.my-custom-interface .brown-option {
+  --color: #5e3e2c;
+  --color-hover: #362419;
+}
+.picked{
+  background: black;
+  color:white;
+}
+.white-space{
+  white-space: pre-wrap;
+}
+
+.forward{
+  position: absolute;
+  top: 16%;
+  right:500px;
+  z-index: 2;
+}
+.back{
+  position: absolute;
+  top: 16%;
+  left: 500px;
+  z-index: 2;
+}
+
+.forward_m{
+  position: absolute;
+  top: 16%;
+  right:15px;
+  z-index: 2;
+}
+.back_m{
+  position: absolute;
+  top: 16%;
+  left:15px;
+  z-index: 2;
+}
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.btn {
+  border: 2px solid gray;
+  color: gray;
+  background-color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+}

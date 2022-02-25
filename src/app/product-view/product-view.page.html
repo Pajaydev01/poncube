@@ -1,0 +1,344 @@
+<ion-app>
+<ion-header>
+  <ion-toolbar>
+    <div class="flex_2">
+  <div (click)="dismiss()"><ion-icon name="arrow-back-outline"></ion-icon></div>
+  <ion-title class="center">
+  {{(name | slice:0:15)+'..' }}
+  </ion-title>
+  <div *ngIf="liker">
+  <div class="" (click)="favorite()" *ngIf="!like">
+    <ion-icon name="heart-outline"></ion-icon>
+  </div>
+  <div class="" (click)="favorite()" *ngIf="like">
+    <ion-icon name="heart" class="c-red"></ion-icon>
+  </div>
+  </div>
+  </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+  <div class="browser">
+    <!-- image slider here -->
+      <ion-card-subtitle class="align-center p-g">Swipe for next image or click to view full image</ion-card-subtitle>
+      <div class="back" (click)="prev()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </div>
+      <div class="forward" (click)="next()">
+        <ion-icon name="arrow-forward"></ion-icon>
+      </div>
+  <ion-slides pager="true" [options]="slideOptions" #slides>
+         <ion-slide  *ngFor="let images of image">
+<div (click)="imageView(images)" [ngStyle]="{'background-image':'url('+images+')','width':'550px', 'height':'550px','background-position':'center','background-size':'cover','background-repeat':'no-repeat','border-radius':'50px'}"></div>
+         </ion-slide>
+       </ion-slides>
+
+  </div>
+
+  <div class="mobile p-g">
+    <!-- image slider here -->
+      <ion-card-subtitle class="align-center p-g">Swipe for next image or click to view full image</ion-card-subtitle>
+      <div class="back_m" (click)="prev()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </div>
+      <div class="forward_m" (click)="next()">
+        <ion-icon name="arrow-forward"></ion-icon>
+      </div>
+  <ion-slides pager="true" [options]="slideOptions" #slider>
+         <ion-slide  *ngFor="let images of image" >
+    <div (click)="imageView(images)" [ngStyle]="{'background-image':'url('+images+')','width':'250px', 'height':'250px','background-position':'center','background-size':'cover','background-repeat':'no-repeat','border-radius':'50px'}"></div>
+         </ion-slide>
+       </ion-slides>
+
+  </div>
+
+  <div *ngIf="product">
+
+    <div class="flex">
+      <ion-card class="browser">
+
+      <div class="grid">
+        <ion-item>
+      <strong class="green"><i>Number of units:</i></strong>
+        <ion-input type="number" placeholder="" [(ngModel)]="unit" class="b-r">
+        </ion-input>
+      </ion-item>
+        <!-- kindly select an option -->
+        <p class="green align-center">Kindly select one of each items options</p>
+        <div class="" *ngFor="let item of options">
+        <ion-item>
+         <div>{{item.name}} :</div>
+         <ion-grid>
+        <ion-row>
+         <div *ngFor="let options of item[item.name]; let i=index;">
+
+           <div tabindex="0" class="options" (click)="check(item.name,options,i)"  [ngClass]="(pick[0]?.choice==options || pick[1]?.choice==options)? 'picked' : ''">{{options}}</div>
+         </div>
+       </ion-row>
+       </ion-grid>
+       </ion-item>
+      </div>
+      <div  *ngFor="let item of choices">
+      <div class=""><strong>
+       Preferred Option(s): {{item.option}} | Choice: {{item.choice}}
+      </strong></div>
+       </div>
+      </div>
+
+      <!-- delivery options here -->
+      <div class="grid">
+        <i>Kindly Select a delivery option of the available options</i>
+      <ion-item>
+      <ion-label>Select a delivery option</ion-label>
+      <ion-select  class="myCustomSelect" [(ngModel)]="delivery_choice" (ionChange)="ship_check()" interface="action-sheet">
+      <ion-select-option *ngFor="let item of delivery; let i=index" value="{{i}}"  class="brown-option">{{item.name}} : {{item.price}}</ion-select-option>
+      </ion-select>
+      </ion-item>
+      </div>
+
+          <div class="cent-l">
+            <ion-button color="primary" (click)="buy()">Buy Now</ion-button>
+            <ion-button color="secondary" (click)="cart()">Add to Shopping list</ion-button>
+              <ion-button color="success" (click)="share()">Copy link</ion-button>
+              <!-- <ion-button color="success" (click)="check()">View seller's profile</ion-button> -->
+          </div>
+      </ion-card>
+
+<ion-card>
+  <ion-card-header>
+<div class="p-b" *ngIf="promo=='1'">
+  <ion-card-subtitle>
+{{promo_name}} | {{percent}} off
+  </ion-card-subtitle>
+</div>
+<div class="p-b">
+  <ion-button color="light" (click)="seller(seller_id)" expand="full">View Seller</ion-button>
+  </div>
+<div class="p-b f-rnd">
+    <ion-card-subtitle>
+      <span *ngIf="promo!=='1'">{{price|currency:currency}}</span>
+      <span *ngIf="promo=='1'"><del>{{price|currency:currency}}</del></span>&nbsp;&nbsp;
+      <span *ngIf="promo=='1'"><strong>{{promo_price|currency:currency}}</strong></span> |  {{(count=="" || count==null)?0:count}} Sold</ion-card-subtitle>
+<ion-card-subtitle class="red">
+  {{c_likes}} Like(s)
+  </ion-card-subtitle>
+</div>
+    <ion-card-title>{{name}}</ion-card-title>
+  </ion-card-header>
+  <div class="mobile">
+    <div class="grid">
+      <ion-item>
+    <strong class="green"><i>Number of units:</i></strong>
+      <ion-input type="number" placeholder="" [(ngModel)]="unit" class="b-r">
+      </ion-input>
+    </ion-item>
+      <!-- kindly select an option -->
+      <ion-card-subtitle class="green align-center">Kindly select one of each items options</ion-card-subtitle>
+      <div class="" *ngFor="let item of options">
+      <ion-item>
+       <div>{{item.name}}</div>
+       <ion-grid>
+      <ion-row>
+       <div *ngFor="let options of item[item.name]; let i=index;">
+
+         <div tabindex="0" class="options" (click)="check(item.name,options)" [ngClass]="(pick[0]?.choice==options || pick[1]?.choice==options)? 'picked' : ''">{{options}}</div>
+       </div>
+     </ion-row>
+     </ion-grid>
+     </ion-item>
+    </div>
+    <div  *ngFor="let item of choices">
+    <div class=""><strong>
+     Preferred Option(s): {{item.option}} | Choice: {{item.choice}}
+    </strong></div>
+     </div>
+    </div>
+
+    <!-- delivery options here -->
+    <div class="grid">
+      <i>Kindly Select a delivery option of the available options</i>
+    <ion-item>
+    <ion-label>Select a delivery option</ion-label>
+    <ion-select  class="myCustomSelect" [(ngModel)]="delivery_choice" (ionChange)="ship_check()" interface="action-sheet">
+    <ion-select-option *ngFor="let item of delivery; let i=index" value="{{i}}"  class="brown-option">{{item.name}} : {{item.price}}</ion-select-option>
+    </ion-select>
+    </ion-item>
+    </div>
+
+        <div class="cent-l">
+          <ion-button color="primary" (click)="buy()">Buy Now</ion-button>
+          <ion-button color="secondary" (click)="cart()">Add to Shopping list</ion-button>
+            <ion-button color="success" (click)="share()">Copy link</ion-button>
+            <!-- <ion-button color="success" (click)="check()">View seller's profile</ion-button> -->
+        </div>
+  </div>
+    <ion-card-content>
+      <strong><i>Item Description</i></strong>
+  <p class="white-space">{{description}}</p>
+</ion-card-content>
+</ion-card>
+</div>
+    <!-- comments -->
+    <div class="f-rnd">
+      <div class="l_1"></div>
+      <div class="t_s">COMMENTS</div>
+      <div class="l_1"></div>
+    </div>
+
+    <!-- comments here -->
+  <div>
+    <ion-list class="" *ngFor="let itemer of comment">
+      <ion-item>
+        <div class="align-center">
+    <i class="green">
+      <strong>
+    {{itemer.user}}:
+  </strong>
+  </i>
+      {{itemer.message}}
+  </div>
+      </ion-item>
+      </ion-list>
+  </div>
+
+</div>
+
+<div *ngIf="service">
+  <div class="flex">
+<ion-card>
+<ion-card-header>
+<div class="p-b" *ngIf="promo=='1'">
+  <ion-card-subtitle>
+{{promo_name}} | {{percent}} off
+  </ion-card-subtitle>
+</div>
+<div class="p-b">
+  <ion-button color="light" expand="full" size="small" (click)="seller(seller_id)">View Seller</ion-button>
+  </div>
+<div class="p-b f-rnd">
+    <ion-card-subtitle>
+      <span *ngIf="promo!=='1'">{{price|currency:currency}}</span>
+      <span *ngIf="promo=='1'"><del>{{price|currency:currency}}</del></span>&nbsp;&nbsp;
+      <span *ngIf="promo=='1'"><strong>{{promo_price|currency:currency}}</strong></span> |  {{(count=="" || count==null)?0:count}} Sold</ion-card-subtitle>
+<ion-card-subtitle class="red">
+  {{c_likes}} Like(s)
+  </ion-card-subtitle>
+</div>
+  <ion-card-title> {{(name | slice:0:15)+'..' }} </ion-card-title>
+</ion-card-header>
+<div class="mobile">
+  <div class="grid">
+  <ion-textarea rows="2" cols="5" placeholder="Kindly state your specifications for this service you want rendered" [(ngModel)]="unit" class="b-r"></ion-textarea>
+
+
+  <div  *ngFor="let item of choices">
+  <div class="">
+  Preferred Option: {{item.option}} | Choice: {{item.choice}}
+  </div>
+  </div>
+  </div>
+
+  <!-- delivery options here -->
+  <div class="grid">
+  <i>Kindly Select a delivery option of the available options</i>
+  <ion-item>
+  <ion-label>Select a delivery option</ion-label>
+  <ion-select [(ngModel)]="delivery_choice" (ionChange)="ship_check()" interface="action-sheet">
+  <ion-select-option *ngFor="let item of delivery; let i=index" value="{{i}}">{{item.name}} : {{item.price}}</ion-select-option>
+  </ion-select>
+  </ion-item>
+  </div>
+<div class="cent"  *ngIf="img_data.to_display!==undefined">
+  <div class="">
+    <p>Tap to remove</p>
+  </div>
+<div [ngStyle]="{'background-image':'url('+img_data.to_display.replace(' ','%20')+')','width':'70px', 'height':'70px','background-position':'center','background-size':'cover','background-repeat':'no-repeat','border-radius':'10px'}"  (click)="remPic()">
+</div>
+</div>
+    <div class="cent-l">
+      <div class="upload-btn-wrapper img-crv">
+      <ion-button color="dark">Image description (optional)</ion-button>
+       <input type="file" accept="image/*" id="upload" (change)="add_image($event)"/>
+      </div>
+      <ion-button color="primary" (click)="buy()">Buy Now</ion-button>
+      <ion-button color="secondary" (click)="cart()">Add to Shopping list</ion-button>
+          <ion-button color="success" (click)="share()">Share</ion-button>
+        <!-- <ion-button color="success" (click)="check()">View seller's profile</ion-button> -->
+    </div>
+</div>
+  <ion-card-content>
+    <strong><i>Item Description</i></strong>
+<p>{{description}}</p>
+</ion-card-content>
+</ion-card>
+
+<ion-card class="browser p-g">
+<div class="grid">
+<ion-textarea rows="2" cols="5" placeholder="Kindly state your specifications for this service you want rendered" [(ngModel)]="unit" class="b-r"></ion-textarea>
+
+
+<div  *ngFor="let item of choices">
+<div class="">
+Preferred Option: {{item.option}} | Choice: {{item.choice}}
+</div>
+</div>
+</div>
+
+<!-- delivery options here -->
+<div class="grid">
+<i>Kindly Select a delivery option of the available options</i>
+<ion-item>
+<ion-label>Select a delivery option</ion-label>
+<ion-select [(ngModel)]="delivery_choice" (ionChange)="ship_check()" interface="action-sheet">
+<ion-select-option *ngFor="let item of delivery; let i=index" value="{{i}}">{{item.name}} : {{item.price}}</ion-select-option>
+</ion-select>
+</ion-item>
+</div>
+<div class="cent"  *ngIf="img_data.to_display!==undefined">
+  <div class="">
+    <p>Tap to remove</p>
+  </div>
+<div [ngStyle]="{'background-image':'url('+img_data.to_display.replace(' ','%20')+')','width':'70px', 'height':'70px','background-position':'center','background-size':'cover','background-repeat':'no-repeat','border-radius':'10px'}" (click)="remPic()">
+</div>
+</div>
+
+  <div class="cent-l">
+    <div class="upload-btn-wrapper img-crv">
+    <ion-button color="dark">Add pictorial description</ion-button>
+     <input type="file" accept="image/*" id="upload" (change)="add_image($event)"/>
+    </div>
+    <ion-button color="primary" (click)="buy()">Buy Now</ion-button>
+    <ion-button color="secondary" (click)="cart()">Add to Shopping list</ion-button>
+        <ion-button color="success" (click)="share()">Share</ion-button>
+      <!-- <ion-button color="success" (click)="check()">View seller's profile</ion-button> -->
+  </div>
+</ion-card>
+</div>
+  <!-- comments -->
+  <div class="f-rnd">
+    <div class="l_1"></div>
+    <div class="t_s">COMMENTS</div>
+    <div class="l_1"></div>
+  </div>
+
+  <!-- comments here -->
+<div>
+  <ion-list class="" *ngFor="let itemer of comment">
+    <ion-item>
+      <div>
+  <i class="green">
+    <strong>
+  {{itemer.user}}:
+</strong>
+</i>
+    {{itemer.message}}
+</div>
+    </ion-item>
+    </ion-list>
+</div>
+</div>
+</ion-card>
+</ion-content>
+</ion-app>

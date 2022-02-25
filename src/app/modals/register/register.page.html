@@ -1,0 +1,252 @@
+<ion-header>
+  <ion-toolbar>
+  <div class="flex">
+<div (click)="dismiss()"><ion-icon name="arrow-back-outline"></ion-icon></div>  <ion-title class="center">{{mode}}</ion-title>
+</div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="register">
+    <ion-card-header class="center">
+      <ion-card-title>JOIN PONCUBE</ion-card-title>
+        <ion-card-subtitle>Kindly fill the form below to join our network</ion-card-subtitle>
+    </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+        <ion-label color="success">
+        First Name
+        </ion-label>
+        <ion-input type="text" [(ngModel)]="f_name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+      <ion-label color="success">
+      Last Name
+      </ion-label>
+      <ion-input type="text" [(ngModel)]="l_name"></ion-input>
+    </ion-item>
+
+      <ion-item>
+      <ion-label color="success">
+      Email
+      </ion-label>
+      <ion-input type="email" [(ngModel)]="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+    <!-- <ion-label color="success">
+    Telephone
+    </ion-label> -->
+    <ion-select placeholder="Country" [(ngModel)]="country" >
+      <ion-select-option *ngFor="let items of countries" value="{{items.dial_code}}">{{items.name}}
+        </ion-select-option>
+    </ion-select>
+
+    <ion-input type="number" [(ngModel)]="phone" placeholder="enter phone number without zero">{{country}}</ion-input>
+  </ion-item>
+
+  <ion-item>
+  <ion-label color="success">
+  Address
+  </ion-label>
+  <ion-input type="text" [(ngModel)]="address"></ion-input>
+  </ion-item>
+
+  <ion-item>
+  <ion-label color="success">
+  Password
+  </ion-label>
+  <ion-input type="password" [(ngModel)]="password"></ion-input>
+</ion-item>
+
+<ion-item>
+<ion-label color="success">
+Confirm password
+</ion-label>
+<ion-input type="password" [(ngModel)]="c_password"></ion-input>
+</ion-item>
+
+<ion-item>
+<ion-label color="success">
+Subscribe to our Newsletter
+</ion-label>
+<ion-checkbox slot="end" color="success" [(ngModel)]="newsletter"></ion-checkbox>
+</ion-item>
+
+<ion-item>
+<ion-label color="dark">
+I have read and agreed to Poncube's Policy and terms of service
+</ion-label>
+<ion-checkbox slot="end" color="success" [(ngModel)]="terms"></ion-checkbox>
+</ion-item>
+
+<div class="cent">
+  <ion-button (click)="registers()" color="light" expand="block" shape="round">Register</ion-button>
+    <ion-button (click)="logger()" color="dark" expand="block" shape="round">I already have an account</ion-button>
+    <div class="fb-login-button" data-width="" data-size="large" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false"></div>
+</div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="s_register" color="progress">
+      <ion-card-header class="center">
+        <ion-card-title>OPEN A SHOP</ion-card-title>
+          <ion-card-subtitle>Kindly fill the form below to join our network as a seller</ion-card-subtitle>
+      </ion-card-header>
+        <ion-card-content>
+          <ion-item>
+          <ion-label color="success">
+          Your shop name
+          </ion-label>
+          <ion-input type="text" [(ngModel)]="Sname" placeholder="Give your shop a unique name"></ion-input>
+        </ion-item>
+
+      <ion-item>
+      <ion-label color="success">
+        Caption
+      </ion-label>
+      <ion-input type="text" [(ngModel)]="caption" placeholder="Enter a short caption or slogan for your store"></ion-input>
+    </ion-item>
+
+    <ion-item>
+    <ion-label color="success">
+      Full details
+    </ion-label>
+    <ion-textarea rows="2" cols="5" placeholder="Describe the full details of your store here" [(ngModel)]="sDetails"></ion-textarea>
+  </ion-item>
+
+    <ion-item>
+    <ion-label color="success">
+  Shop Address
+    </ion-label>
+    <ion-input type="text" [(ngModel)]="Saddress" placeholder="Enter your shop location"></ion-input>
+    </ion-item>
+
+    <!-- image here -->
+    <div class="cent">
+      <div class="upload-btn-wrapper">
+        <button class="btn">select store image</button>
+        <input type="file" accept="image/*" id="upload" (change)="add_image($event)"/>
+      </div>
+    </div>
+
+    <div class="cent">
+    <ion-img [src]="image" *ngIf="imager"></ion-img>
+      </div>
+
+
+  <ion-item>
+  <ion-label color="dark">
+  I have read and agreed to Poncube's Policy and terms of service
+  </ion-label>
+  <ion-checkbox slot="end" color="success" [(ngModel)]="Sterms"></ion-checkbox>
+  </ion-item>
+
+  <div class="cent">
+    <ion-button (click)="Sregisters()" color="light" expand="block" shape="round">Register</ion-button>
+  </div>
+        </ion-card-content>
+      </ion-card>
+
+
+<!-- users login here -->
+
+    <ion-card *ngIf="login">
+      <ion-card-header class="center">
+        <ion-card-title>LOGIN TO PONCUBE</ion-card-title>
+          <ion-card-subtitle>Kindly fill the form below to login to your account</ion-card-subtitle>
+      </ion-card-header>
+        <ion-card-content>
+          <ion-item>
+          <ion-label color="success">
+          Telephone or Email
+          </ion-label>
+          <ion-input type="text" [(ngModel)]="r_name"></ion-input>
+        </ion-item>
+
+        <ion-item>
+        <ion-label color="success">
+        Password
+        </ion-label>
+        <ion-input type="password" [(ngModel)]="r_pass"></ion-input>
+      </ion-item>
+
+  <div class="cent">
+    <ion-button (click)="logins()" color="light" expand="block" shape="round">Login</ion-button>
+
+    <!-- <i>Or sign with social network</i> -->
+<!-- <div class="g-sign" (click)="loginWithGoogle()" *ngIf="initialized">
+
+</div>
+
+    <ion-button color="primary" (click)="fb_login()" shape="round">sign in with FACEBOOK <ion-icon name="logo-facebook"></ion-icon></ion-button>
+
+
+    <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
+
+      <ion-button (click)="regger()" color="dark" expand="block" shape="round">I'm not a member
+      </ion-button>
+      <div class="">
+        <p>Forgot password? <span class="green center point" (click)="resets()">Reset</span></p>
+      </div>
+  </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- password reset here -->
+      <ion-card *ngIf="reset">
+        <ion-card-header class="center">
+          <ion-card-title>Reset your password</ion-card-title>
+            <ion-card-subtitle>Kindly enter the mail associated with your account or phone number</ion-card-subtitle>
+        </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+            <ion-label color="success">
+            Telephone or Email
+            </ion-label>
+            <ion-input type="text" [(ngModel)]="reset_mail" placeholder="mail or phone"></ion-input>
+          </ion-item>
+    <div class="cent">
+      <ion-button (click)="reseter()" color="light" expand="block" shape="round">Reset password
+      </ion-button>
+
+        <ion-button (click)="regger()" color="dark" expand="block" shape="round">I'm not yet a member
+        </ion-button>
+    </div>
+          </ion-card-content>
+        </ion-card>
+
+
+
+
+
+      <ion-card *ngIf="s_login" color="success">
+        <ion-card-header class="center">
+          <ion-card-title>LOGIN TO PONCUBE SHOP</ion-card-title>
+            <ion-card-subtitle>Kindly fill the form below to login to your account</ion-card-subtitle>
+        </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+            <ion-label color="success">
+            Username/Email
+            </ion-label>
+            <ion-input type="text" [(ngModel)]="s_name"></ion-input>
+          </ion-item>
+
+          <ion-item>
+          <ion-label color="success">
+          Password
+          </ion-label>
+          <ion-input type="password" [(ngModel)]="s_pass"></ion-input>
+        </ion-item>
+
+    <div class="cent">
+      <ion-button (click)="logins_s()" color="light" expand="block" shape="round">Login</ion-button>
+        <ion-button (click)="logger()" color="success" expand="block" shape="round">Not a Seller</ion-button>
+        <ion-button (click)="regger()" color="dark" expand="block" shape="round">I'm not yet a member</ion-button>
+
+    </div>
+          </ion-card-content>
+        </ion-card>
+</ion-content>

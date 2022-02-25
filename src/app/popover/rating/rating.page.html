@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="align-center">Rate this shop</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<div class="center">
+  <ion-card-subtitle>
+  <strong>  Store Rating: <span *ngFor="let star of rating; let i=index;">
+<ion-icon name="star" [style.color]="rates.rates[i]==i?'green':''">
+</ion-icon>
+  </span>
+</strong>
+    </ion-card-subtitle>
+</div>
+  <div class="center">
+    <div *ngFor="let star of rating;  let i=index;" class="">
+<ion-button size='small' color="dark" (click)="mark(i)">
+  <ion-icon slot='icon-only' name='star' [style.color]="number>=i?'green':''">
+</ion-icon>
+</ion-button>
+</div>
+</div>
+<div class="center">
+  <ion-button (click)="submit()" size="small" color="success">
+    Submit Rating
+    </ion-button>
+</div>
+
+</ion-content>

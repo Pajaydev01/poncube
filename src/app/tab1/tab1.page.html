@@ -1,0 +1,333 @@
+<ion-app  class="white">
+  <ion-menu side="start" menuId="first" contentId="main">
+    <ion-header>
+    <ion-toolbar color="success">
+      <ion-title>CATEGORIES</ion-title>
+    </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list *ngFor="let items of categories">
+        <ion-item (click)="sub(items.category_id, $event,items.category)" class="hover">{{items.category}}</ion-item>
+        </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="main" ></ion-router-outlet>
+
+<ion-header [translucent]="true">
+
+  <ion-toolbar>
+    <div class="browser">
+      <div class="p-t">
+        <div *ngIf="scrolled">
+
+        <div *ngIf="logged" class="logger">
+          <div class="">
+            <ion-select placeholder="Change currency" [(ngModel)]="currency" (ionChange)="change_rate()">
+              <ion-select-option value="NGN">NGN</ion-select-option>
+                <ion-select-option value="USD">USD</ion-select-option>
+                  <ion-select-option value="GBP">GBP</ion-select-option>
+                    <ion-select-option value="EUR">EUR</ion-select-option>
+              </ion-select>
+          </div>
+                  <ion-button (click)="reg('login')" class="">Sign in</ion-button>
+             <ion-button  (click)="load_cart()" class="cart" data-hover="My Carts">  <ion-icon name="cart"></ion-icon> <span class="counter" color="light">{{counts}}</span></ion-button>
+                </div>
+                <div class="logger" *ngIf="!logged">
+                  <div class="">
+                    <ion-select placeholder="Change currency" [(ngModel)]="currency" (ionChange)="change_rate()">
+                      <ion-select-option value="NGN">NGN</ion-select-option>
+                        <ion-select-option value="USD">USD</ion-select-option>
+                          <ion-select-option value="GBP">GBP</ion-select-option>
+                            <ion-select-option value="EUR">EUR</ion-select-option>
+                      </ion-select>
+                  </div>
+                  <ion-button (click)="meni('menu',$event,dp,fullname)"><img src="{{(dp=='' || dp==undefined)?'assets/images/user.png':dp}}" class="dp">
+                  </ion-button>
+                    <ion-button  (click)="load_cart()" data-hover="My Carts" class="cart">  <ion-icon name="cart"></ion-icon> <span class="counter" color="light">{{counts}}</span></ion-button>
+                  </div>
+</div>
+          <div class="center" *ngIf="scrolled">
+          <div class="logo">
+<img src="assets/images/logo.png">
+          </div>
+            </div>
+
+            <!-- search for browser -->
+            <div class="">
+        <div class="browser">
+          <ion-searchbar showCancelButton="focus" placeholder="{{sFilter}}" class="align-center" [(ngModel)]="search" (ionChange)="searchs($event)" debounce="0" class="searchbar" (click)="scroll($event)"></ion-searchbar>
+          </div>
+
+            </div>
+</div>
+</div>
+
+<ion-select #sfilter style="display:none" interface="action-sheet" [interfaceOptions]="customActionSheetOptions" placeholder="Filter your" (ionChange)="filter()" [(ngModel)]="filterValue" >
+  <ion-select-option value="products">Products</ion-select-option>
+    <ion-select-option value="sellers">Shops</ion-select-option>
+  </ion-select>
+<div class="mobile">
+  <div>
+    <div *ngIf="scrolled">
+    <div class="flex" *ngIf="logged">
+      <div class="flex">
+
+          <ion-select placeholder="Change currency" [(ngModel)]="currency" (ionChange)="change_rate()">
+            <ion-select-option value="NGN">NGN</ion-select-option>
+              <ion-select-option value="USD">USD</ion-select-option>
+                <ion-select-option value="GBP">GBP</ion-select-option>
+                  <ion-select-option value="EUR">EUR</ion-select-option>
+            </ion-select>
+
+        <ion-button (click)="reg('login')" class="">Sign in</ion-button>
+  <ion-button  (click)="load_cart()">  <ion-icon name="cart"></ion-icon> <span class="counter" color="light">{{counts}}</span></ion-button>
+  </div>
+      </div>
+      <div class="flex" *ngIf="!logged">
+        <ion-select placeholder="Change currency" [(ngModel)]="currency" (ionChange)="change_rate()">
+          <ion-select-option value="NGN">NGN</ion-select-option>
+            <ion-select-option value="USD">USD</ion-select-option>
+              <ion-select-option value="GBP">GBP</ion-select-option>
+                <ion-select-option value="EUR">EUR</ion-select-option>
+          </ion-select>
+        <ion-button (click)="meni('menu',$event,dp,fullname)"><img src="{{(dp=='' || dp==undefined)?'assets/images/user.png':dp}}" class="dp">
+        </ion-button>
+          <ion-button  (click)="load_cart()">  <ion-icon name="cart"></ion-icon> <span class="counter" color="light">{{counts}}</span></ion-button>
+        </div>
+        </div>
+
+        <div class="center" *ngIf="scrolled">
+          <div class="logo">
+      <img src="assets/images/logo.png">
+          </div>
+    </div>
+          </div>
+</div>
+
+
+
+        <ion-grid>
+      <ion-row class="center">
+
+        <ion-col class="mobile">
+          <div class="center"><div><ion-icon name="menu" class="icon" (click)="openFirst()"></ion-icon></div><ion-searchbar showCancelButton="focus" placeholder="{{sFilter}}"  class="search" [(ngModel)]="search" (ionChange)="searchs()" debounce="0" (click)="scroll($event)"></ion-searchbar></div>
+          </ion-col>
+      </ion-row>
+      </ion-grid>
+
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" #content *ngIf="data" [scrollEvents]="true" (ionScroll)="onScroll($event)">
+  <!-- side menu here -->
+
+
+<ion-grid>
+<ion-row>
+    <ion-col class="browser">
+                  <div class="center">
+                    <div *ngFor="let items of categories">
+                    <ion-button size="small" (click)="sub(items.category_id, $event,items.category)" >  {{items.category}}</ion-button>
+                    </div>
+                  </div>
+      </ion-col>
+</ion-row>
+  <ion-row color="">
+   <ion-col class="browser green">
+           <p class="align-center pb-1">SHOPS YOU MIGHT LIKE</p>
+           <div class="back" (click)="prev()">
+             <ion-icon name="arrow-back"></ion-icon>
+           </div>
+           <div class="forward" (click)="next()">
+             <ion-icon name="arrow-forward"></ion-icon>
+           </div>
+
+             <ion-slides pager="false" [options]="slideOptsBrowser" #slides>
+                    <ion-slide *ngFor="let items of store">
+                      <ion-card class="store_card">
+                        <ion-card-header class="grid">
+                          <div class="center">
+                      <div (click)="check_store(items.store_id)" [ngStyle]="{'background-image':'url('+items.dp.replace(' ','%20')+')','width':'150px', 'height':'150px','background-position':'center','background-size':'cover','background-repeat':'no-repeat','border-radius':'50px'}">
+                        </div>
+                        </div>
+                        <ion-card-subtitle class="t-small"><strong>{{items.name}}</strong></ion-card-subtitle>
+                      <ion-card-subtitle class="m-s-1">  <i>{{items.caption}}</i></ion-card-subtitle>
+                        </ion-card-header>
+                        </ion-card>
+                    </ion-slide>
+                  </ion-slides>
+
+      </ion-col>
+
+      <ion-col class="mobile green">
+              <p class="align-center pb-1">SHOPS YOU MIGHT LIKE</p>
+              <div class="back" (click)="prev()">
+                <ion-icon name="arrow-back" class="c-green"></ion-icon>
+              </div>
+              <div class="forward" (click)="next()">
+                <ion-icon name="arrow-forward" class="c-green"></ion-icon>
+              </div>
+                <ion-slides pager="false" [options]="slideOptsMobile" #slider>
+                       <ion-slide *ngFor="let items of store">
+                         <ion-card class="store_card">
+                           <ion-card-header class="grid">
+                               <div class="center">
+                         <div (click)="check_store(items.store_id)" [ngStyle]="{'background-image':'url('+items.dp.replace(' ','%20')+')','width':'110px', 'height':'110px','background-position':'center','background-size':'cover','background-repeat':'no-repeat','border-radius':'70px'}">
+                           </div>
+                           </div>
+                            <ion-card-subtitle class="t-small"><strong>{{items.name}}</strong></ion-card-subtitle>
+                         <ion-card-subtitle class="m-s">  <i>{{items.caption}}</i></ion-card-subtitle>
+                           </ion-card-header>
+                           </ion-card>
+                       </ion-slide>
+                     </ion-slides>
+
+         </ion-col>
+    </ion-row>
+
+
+     <ion-card-title class="align-center t-small">EXPLORE PRODUCTS
+</ion-card-title>
+
+    <ion-row class="center p_t" >
+      <ion-col  *ngFor="let result of products" size="6" class="mobile"  [ngClass]="(result?.amount>0 || result?.amount=='')? '' : 'visible' ">
+        <div>
+        <div (click)="product(result.item_id, result.shop_id,result.item_type)" class="box" *ngIf="products?.length!==0">
+               <div class="center"><div class="" [ngStyle]="{'background-image':'url('+result.image.replace(' ','%20')+')','width':'110px', 'height':'110px','background-position':'center','background-size':'cover','background-repeat':'no-repeat','border-radius':'70px'}">
+
+               </div></div>
+          <div>
+           <ion-card-title class="align-center t-small"><strong>
+ {{ (result.name.length>6)? (result.name | slice:0:15)+'..':(result.name) }}</strong></ion-card-title>
+           <ion-card-content>
+             <div class="align-center">
+               <!-- separate discountd offers -->
+               <p *ngIf="result.promo!=='1'"><strong>{{(result.price*rate_value) | currency:currency}}</strong></p>
+               <p *ngIf="result.promo==='1'"><del><strong>{{(result.price*rate_value) | currency:currency}}</strong></del></p>
+               <p *ngIf="result.promo==='1'" class="gr"><strong>{{(result.promo_price*rate_value) | currency:currency}}</strong></p>
+               <p *ngIf="result.promo==='1'" class="gr">{{result.promo_name}}</p>
+
+              <!-- <p class="m-s"><strong>{{result.price | currency:"NGN"}}</strong></p> -->
+               <p class="t-small"><strong>{{(result.item_type!=="service")?(result.amount)+'available':"Click to view service details"}}</strong></p>
+             </div>
+          </ion-card-content>
+         </div>
+         </div>
+          </div>
+
+          <ion-card *ngIf="products.length===0">
+            <ion-card-title>Sorry no products available for now, please check back</ion-card-title>
+            </ion-card>
+        </ion-col>
+
+        <ion-col  *ngFor="let result of products" size="2" class="ion-align-self-center browser" #contents [ngClass]="(result?.amount>0 || result?.amount=='')? '' : 'visible' ">
+          <div>
+          <ion-card (click)="product(result.item_id, result.shop_id,result.item_type)" button="true" *ngIf="products.length!==0">
+
+<div class="center"><ion-img [src]="result.image"></ion-img></div>
+
+            <ion-card-header>
+             <ion-card-title class="align-center"><strong> {{ (result.name.length>6)? (result.name | slice:0:15)+'..':(result.name) }}</strong></ion-card-title>
+             <ion-card-content>
+               <div class="align-center">
+<!-- separate discountd offers -->
+<h3 *ngIf="result.promo!=='1'"><strong>{{(result.price*rate_value) | currency:currency}}</strong></h3>
+<h3 *ngIf="result.promo==='1'"><del><strong>{{(result.price*rate_value) | currency:currency}}</strong></del></h3>
+<h3 *ngIf="result.promo==='1'" class="gr"><strong>{{(result.promo_price*rate_value) | currency:currency}}</strong></h3>
+<h3 *ngIf="result.promo==='1'" class="gr">{{result.promo_name}}</h3>
+
+
+
+                 <h3><strong>{{(result.item_type!=="service")?(result.amount)+' Available':"Click to view service details"}}</strong></h3></div>
+            </ion-card-content>
+           </ion-card-header>
+            </ion-card>
+            </div>
+            <ion-card *ngIf="products.length===0">
+              <ion-card-title>Sorry no products available for now, please check back</ion-card-title>
+              </ion-card>
+          </ion-col>
+      </ion-row>
+<app-footpage></app-footpage>
+
+
+</ion-grid>
+
+<!-- <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+
+  <ion-fab-button color="success" (click)="load_cart()"><ion-icon name="chatbox"></ion-icon> -->
+    <!-- <sub class="counter" color="light">{{counts}}</sub> -->
+  <!-- </ion-fab-button>
+</ion-fab> -->
+  <ion-refresher slot="fixed" pullFactor="0.5" pullMin="100" pullMax="200" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+</ion-content>
+
+</ion-app>
+
+<!-- Skeleton screen -->
+<div *ngIf="!data">
+  <div class="ion-padding custom-skeleton">
+    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+    <ion-skeleton-text animated></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+  </div>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>
+        <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
+      </ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-avatar slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-avatar>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-thumbnail slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-thumbnail>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-skeleton-text animated style="width: 27px; height: 27px" slot="start"></ion-skeleton-text>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</div>

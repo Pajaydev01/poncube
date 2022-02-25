@@ -1,0 +1,19 @@
+.center{
+  display: flex;
+  justify-content: center;
+}
+
+.dp{
+  width:60px;
+  height:60px;
+  border-radius:90px;
+}
+
+.sm-center{
+  text-align: center;
+  font-size: 15px;
+}
+
+ion-item{
+  cursor: pointer;
+}

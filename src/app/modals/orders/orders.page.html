@@ -1,0 +1,296 @@
+<ion-app *ngIf="data">
+<ion-header>
+  <ion-toolbar color="dark">
+    <div class="flex">
+  <div (click)="dismiss()" *ngIf="arrow"><ion-icon name="arrow-back-outline"></ion-icon></div>
+    <div (click)="dismiss()" *ngIf="!arrow"><ion-icon name="arrow-back-outline"></ion-icon></div>
+  <div><ion-title class="center">MY ACTIVE ORDERS</ion-title></div>
+  </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="customer">
+  <div class="center">
+<div>
+<div *ngIf="empty">
+  <i>You have made no purchases yet, we look forward to you making purchases on PONCUBE, thanks!</i>
+</div>
+  <div *ngIf='!empty'>
+  <ion-card *ngFor="let items of product_lists">
+    <ion-card-header>
+  <div class="center">
+  <ion-img [src]="items.product_image"></ion-img>
+  </div>
+      <ion-card-title>{{items.product_name}}</ion-card-title>
+      <strong><ion-card-subtitle>Seller's name: {{items.seller_name}}</ion-card-subtitle></strong>
+      <strong>  <ion-card-subtitle>Seller's Mail | phone: {{items.seller_mail}} | {{items.seller_phone}}</ion-card-subtitle></strong>
+        <strong><ion-card-subtitle>Store name: {{items.shop_name}}</ion-card-subtitle></strong>
+        <strong> <ion-card-subtitle>Store address: {{items.shop_address}}</ion-card-subtitle></strong>
+        <div class="rate">
+
+          <!-- <div *ngIf="rating_show"><ion-card-subtitle>
+          <strong>  Store Rating: <span *ngFor="let star of rating; let i=index;">
+        <ion-icon name="star" [style.color]="rates.rates[i]==i?'green':''">
+        </ion-icon>
+          </span>
+        </strong>
+            </ion-card-subtitle>
+</div> -->
+<div class="">
+  <ion-button size="small" color="success" (click)="vote(items.seller_id, $event,items.rating)">Rate store</ion-button>
+</div>
+
+        </div>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong> Price: {{(items.product_price-items.product_delivery.price) | currency:"NGN"}}</strong></p>
+      <!-- for products -->
+  <div class="cent" *ngIf="!items.product_options.length==0">
+<p>Total Item(s): {{items.product_unit}}</p>
+<strong>Options chosen:</strong>
+<div class="" *ngFor="let item of items.product_options">
+  {{item.option}} : {{item.choice}}
+</div>
+<strong>Delivery mode</strong>
+<div class="">
+  {{items.product_delivery.name}} : {{items.product_delivery.price | currency:"NGN"}}
+</div>
+<div>
+<strong>Date of purchase: {{items.purchase_date}}</strong>
+</div>
+
+<strong>Total Payment(Delivery and other options)</strong>
+<div class="">
+{{items.product_price | currency:"NGN"}}
+</div>
+  </div>
+
+<!-- for services -->
+  <div class="cent"  *ngIf="items.product_options.length==0">
+<strong>Options chosen:</strong>
+<strong>Delivery mode</strong>
+<div class="">
+  {{items.product_delivery.name}} : {{items.product_delivery.price | currency:"NGN"}}
+</div>
+<div>
+<strong>Date of purchase: {{items.purchase_date}}</strong>
+</div>
+
+<strong>Total Payment(Delivery and other options)</strong>
+<div class="">
+  {{items.product_price | currency:"NGN"}}
+</div>
+  </div>
+
+
+  <div class="flex-fl">
+    <ion-button color="light" disabled="true" *ngIf="items.delivered==='processing'">PROCESSING...</ion-button>
+        <ion-button color="primary" *ngIf="items.delivered==='processing' || items.delivered==='waiting'" (click)="dispute(items.customer_id,items.seller_id,items.item_id,items.sn)">DISPUTE</ion-button>
+    <ion-button color="danger" *ngIf="items.delivered==='false'" (click)="canceller(items.customer_id,items.seller_id,items.item_id,items.sn,'user')">Cancel order</ion-button>
+      <ion-button color="light" *ngIf="items.delivered==='waiting'" (click)="confirms(items.customer_id,items.seller_id,items.item_id,items.sn,items.product_price)">CONFIRM DELIVERY</ion-button>
+      <ion-button color="success" *ngIf="items.delivered==='true'" disabled="true">COMPLETED</ion-button>
+      <ion-button color="success" *ngIf="items.delivered==='cancelled'" disabled="true">CANCELLED</ion-button>
+        <ion-button color="danger" *ngIf="items.delivered==='disputed'" disabled="true">IN DISPUTE</ion-button>
+
+  </div>
+
+  <div class="flexer point" *ngIf="id!==items.item_id" (click)="com(items.customer_id,items.seller_id,items.item_id,items.sn)">
+    <div class="l_1"></div>
+    <div class="t_s">VIEW COMMENTS</div>
+    <div class="l_1"></div>
+  </div>
+
+  <div class="flexer point" *ngIf="id===items.item_id" (click)="hide_comm()">
+    <div class="l_1"></div>
+    <div class="t_s">HIDE COMMENTS</div>
+    <div class="l_1"></div>
+  </div>
+
+  <!-- comments here -->
+<div class=""  *ngIf="id===items.item_id">
+  <ion-list class="cent" *ngFor="let itemer of comment">
+    <ion-item>
+      <div>
+  <i class="green">
+    <strong>
+  {{itemer.user}}:
+</strong>
+</i>
+    {{itemer.message}}
+</div>
+    </ion-item>
+    </ion-list>
+</div>
+
+<!-- add comment here -->
+<div class="center p_t" (click)="adder()" *ngIf="!add_comment">
+<ion-button color="light" size="small">
+ADD COMMENT
+</ion-button>
+</div>
+
+
+<div class="grid p_t" *ngIf="add_comment">
+  <ion-item>
+    <ion-textarea rows="2"  placeholder="Enter comment" [(ngModel)]="comment_input"></ion-textarea>
+    </ion-item>
+        <ion-button (click)="add_comm(items.customer_id,items.seller_id,items.item_id,items.sn)" color="light">ADD</ion-button>
+          <ion-button (click)="cancel_comment()" color="dark">CANCEL</ion-button>
+</div>
+
+      </ion-card-content>
+    </ion-card>
+    </div>
+    </div>
+    </div>
+</ion-content>
+
+
+<ion-content *ngIf="!customer">
+  <div class="center">
+<div>
+<div *ngIf="empty">
+  <i>You have no orders yet, you will be notified once a product of yours have been purchased, thanks!</i>
+</div>
+  <div *ngIf='!empty'>
+  <ion-card *ngFor="let items of product_lists">
+    <ion-card-header>
+  <div class="center">
+  <ion-img [src]="items.product_image"></ion-img>
+  </div>
+      <ion-card-title>{{items.product_name}}</ion-card-title>
+        <ion-card-subtitle>Buyer's name: {{items.buyer_name}}</ion-card-subtitle>
+          <ion-card-subtitle>Buyer's Mail | phone: {{items.buyer_mail}} | {{items.buyer_phone}}</ion-card-subtitle>
+          <div class="">
+          <!-- check user shipping address here manually instead -->
+            <ion-button class="" color="light" size="small" (click)="ships(items.customer_id,$event)">
+          Check shipping address
+              </ion-button>
+          </div>
+    </ion-card-header>
+    <ion-card-content>
+  <p><strong> Price: {{(items.product_price-items.product_delivery.price) | currency:"NGN"}}</strong></p>
+
+      <!-- for products -->
+  <div class="cent" *ngIf="!items.product_options.length==0">
+<p>Total Item(s): {{items.product_unit}}</p>
+<strong>Options chosen:</strong>
+<div class="" *ngFor="let item of items.product_options">
+  {{item.option}} : {{item.choice}}
+</div>
+<strong>Delivery mode</strong>
+<div class="">
+  {{items.product_delivery.name}} : {{items.product_delivery.price | currency:"NGN"}}
+</div>
+<div>
+<strong>Date of purchase: {{items.purchase_date}}</strong>
+</div>
+<strong>Total Payment (Delivery and other options)</strong>
+<div class="">
+{{items.product_price | currency:"NGN"}}
+</div>
+  </div>
+
+<!-- for services -->
+  <div class="cent"  *ngIf="items.product_options.length==0">
+<strong>Delivery mode</strong>
+<div class="">
+  {{items.product_delivery.name}} : {{items.product_delivery.price | currency:"NGN"}}
+</div>
+
+<div>
+<strong>Date of purchase: {{items.purchase_date}}</strong>
+</div>
+<div>
+<strong>Total Payment(Delivery and other options)</strong>
+  </div>
+<div class="">
+{{items.product_price | currency:"NGN"}}
+</div>
+  </div>
+
+
+  <div class="flex-fl">
+      <ion-button color="light" *ngIf="(items.attachment!='empty' && items.attachment!='')" (click)="view(items.attachment)"> View request attachment</ion-button>
+    <ion-button color="primary" *ngIf="items.delivered==='processing'" (click)="accept(items.customer_id,items.seller_id,items.item_id,items.sn,'deliver')"> PROCESSING..(INITIATE DELIVERY)</ion-button>
+    <ion-button color="danger" *ngIf="items.delivered==='false'" (click)="canceller(items.customer_id,items.seller_id,items.item_id,items.sn,'seller')">Decline order</ion-button>
+    <ion-button color="success" *ngIf="items.delivered==='false'" (click)="accept(items.customer_id,items.seller_id,items.item_id,items.sn,'accept')">ACCEPT (to mark as processing)</ion-button>
+      <ion-button color="light" *ngIf="items.delivered==='waiting'" disabled="true">AWAITING DELIVERY CONFIRMATION</ion-button>
+      <ion-button color="success" *ngIf="items.delivered==='true'" disabled="true">COMPLETED</ion-button>
+      <ion-button color="success" *ngIf="items.delivered==='cancelled'" disabled="true">CANCELLED</ion-button>
+  <ion-button color="danger" *ngIf="items.delivered==='disputed'" disabled="true">IN DISPUTE</ion-button>
+  </div>
+      </ion-card-content>
+    </ion-card>
+    </div>
+    </div>
+    </div>
+</ion-content>
+
+</ion-app>
+
+
+<!-- Skeleton screen -->
+<div *ngIf="!data">
+  <div class="ion-padding custom-skeleton">
+    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+    <ion-skeleton-text animated></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+  </div>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>
+        <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
+      </ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-avatar slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-avatar>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-thumbnail slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-thumbnail>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-skeleton-text animated style="width: 27px; height: 27px" slot="start"></ion-skeleton-text>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</div>

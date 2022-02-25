@@ -1,0 +1,8 @@
+<ion-content>
+<ion-item color="dark" class="hover" (click)="check_category(category_id)">
+  <strong>{{viewd}}</strong>
+  </ion-item>
+<ion-list *ngFor="let items of sub_category">
+  <ion-item (click)="sub(items.id,$event,items.name)" class="hover">{{items.name}}</ion-item>
+  </ion-list>
+  </ion-content>
